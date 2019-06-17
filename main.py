@@ -2,7 +2,8 @@ import webapp2
 import jinja2
 import os
 from google.appengine.api import users
-from models import Manga, Friends
+from google.appengine.ext import ndb
+from models import Manga, User
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -27,7 +28,7 @@ class NoUserHandler(webapp2.RequestHandler):
 #user is loggedin
 class LoggedInHandler(webapp2.RequestHandler):
     def get(self):
-        hometemplate = JINJA_ENVIRONMENT.get_template('templates/home.html')
+        hometemplate = JINJA_ENVIRONMENT.get_template('templates/homepage.html')
         user = users.get_current_user()
         email = user.nickname()
 
@@ -38,8 +39,17 @@ class LoggedInHandler(webapp2.RequestHandler):
 
 class SearchBarHandler(webapp2.RequestHandler):
     def get(self):
-        searchtemplate = JINJA_ENVIRONMENT.get_template('templates/search.html')
+        searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime.html')
         self.response.write(searchtemplate.render())
+
+def CalculateRating(Manga,rating):
+    Manga.total_ratings.append(rating)
+    sum = 0
+    for n in manga.total_ratings:
+        sum += n
+    Manga.average_ratings = sum
+    Manga.put()
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPageHandler),
