@@ -48,6 +48,7 @@ class SearchBarHandler(webapp2.RequestHandler):
     def post(self):
         searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime1.html')
         searchTerm=self.request.get('search')
+        searchTerm=searchTerm.replace(' ','%20')
         endpoint_url='https://kitsu.io/api/edge/manga?page[limit]=20&filter[text]='+searchTerm
         response = urlfetch.fetch(endpoint_url)
         content = response.content
