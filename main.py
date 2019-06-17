@@ -4,6 +4,9 @@ import os
 from google.appengine.api import users
 from google.appengine.api import urlfetch
 import json
+from google.appengine.ext import ndb
+from models import Manga, User
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -57,6 +60,15 @@ class SearchBarHandler(webapp2.RequestHandler):
         dd = {'d': d}
         self.response.write(searchtemplate.render(dd))
 
+
+
+def CalculateRating(Manga,rating):
+    Manga.total_ratings.append(rating)
+    sum = 0
+    for n in manga.total_ratings:
+        sum += n
+    Manga.average_ratings = sum
+    Manga.put()
 
 
 app = webapp2.WSGIApplication([
