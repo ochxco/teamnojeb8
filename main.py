@@ -30,20 +30,21 @@ class LoggedInHandler(webapp2.RequestHandler):
     def get(self):
         hometemplate = JINJA_ENVIRONMENT.get_template('templates/homepage.html')
         user = users.get_current_user()
-        user.nickname() = User.username
+        object_name = user.nickname()
+        object_name = User(email = user.nickname())
 
         logout_url = users.create_logout_url("/")
 
-        self.response.write("Hello " + User.username + '. You are logged in. <a href="' + logout_url + '">Click here to log out</a>')
+        self.response.write("Hello " + user.nickname() + '. You are logged in. <a href="' + logout_url + '">Click here to log out</a>')
         self.response.write(hometemplate.render())
-        User.put()
+        object_name.put()
 
 class SearchBarHandler(webapp2.RequestHandler):
     def get(self):
         searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime.html')
         self.response.write(searchtemplate.render())
 
-def CalculateRating(Manga,rating):
+def CalculateRating(manga_id,rating):
     Manga.total_ratings.append(rating)
     sum = 0
     for n in manga.total_ratings:
