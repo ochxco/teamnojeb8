@@ -2,6 +2,7 @@ import webapp2
 import jinja2
 import os
 from google.appengine.api import users
+from models import Manga, Friends
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
