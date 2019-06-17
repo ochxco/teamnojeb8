@@ -19,6 +19,7 @@ function processResponse(json) {
 }
 
 function onButtonClick() {
+  $('.searchresult').empty();
   $('#images').empty();
   console.log("Button is clicked");
 
