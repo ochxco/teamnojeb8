@@ -19,6 +19,11 @@ img {
   font-weight: bold;
   margin-top: -5px;
 }
+.searchresult {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
 
 
 #images {
