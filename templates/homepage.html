@@ -4,19 +4,19 @@
     <meta charset ='utf-8'>
     <title>Home Page!</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="homepage.js"></script>
-    <link rel="stylesheet" href="homepage.css"/>
+    <!-- <script src="/scripts/homepage.js"></script> -->
+    <!-- <link rel="stylesheet" href="homepage.css"/> -->
   </head>
   <body>
     <div>
       <h2> Homepage </h2>
       <h2> Logout </h2>
     </div>
-    <form class="example" action="action_page.php">
-      <input type="text" placeholder="Search.." name="search">
-      <button type="submit"><i class="fa fa-search"></i></button>
+    <form method=POST action="/search">
+      <input type="text" placeholder="Search.." name="search" id ='searchterm'>
+      <input type="submit" value="Go" id ='clicks'>
     </form>
-    <div id ='clicks'></div>
+
     <div id ='images'></div>
     <div id='titles'></div>
     <br>

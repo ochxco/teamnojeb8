@@ -2,8 +2,11 @@ import webapp2
 import jinja2
 import os
 from google.appengine.api import users
+from google.appengine.api import urlfetch
+import json
 from google.appengine.ext import ndb
 from models import Manga, User
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -43,6 +46,23 @@ class SearchBarHandler(webapp2.RequestHandler):
     def get(self):
         searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime.html')
         self.response.write(searchtemplate.render())
+    def post(self):
+        searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime1.html')
+        searchTerm=self.request.get('search')
+        endpoint_url='https://kitsu.io/api/edge/manga?page[limit]=20&filter[text]='+searchTerm
+        response = urlfetch.fetch(endpoint_url)
+        content = response.content
+        response_as_json = json.loads(content)
+        d={}
+        for i in range(len(response_as_json['data'])):
+            image_url=response_as_json['data'][i]['attributes']['posterImage']['medium']
+            titles=response_as_json['data'][i]['attributes']['canonicalTitle']
+            d[i]=[image_url,titles]
+        print(d)
+        dd = {'d': d}
+        self.response.write(searchtemplate.render(dd))
+
+
 
 def CalculateRating(manga_id,rating):
     Manga.total_ratings.append(rating)

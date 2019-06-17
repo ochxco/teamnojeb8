@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset ='utf-8'>
+    <title>tryanimes</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="/scripts/tryanime.js"></script>
+    <link rel="stylesheet" href="/styles/tryanime.css"/>
+  </head>
+  <body>
+    <input type='textbox' id ='searchterm' value='{{search}}'></input>
+    <div id ='clicks'>Click here</div>
+    <div class='searchresult'>
+    {% for key,value in d.items() %}
+      <div class="info">
+        <img src={{value[0]}}>
+        <p> {{value[1]}} </p>
+      </div>
+    {% endfor %}
+    </div>
+    <div id ='images'></div>
+    <div id='titles'></div>
+  </body>
+
+</html>
