@@ -10,7 +10,6 @@ class Manga(ndb.Model):
 class User(ndb.Model):
     email = ndb.StringProperty(required=True)
     name = ndb.StringProperty(required=True)
-    username = ndb.StringProperty(required=True)
     friends_list = ndb.StringProperty(required=False)
     groups = ndb.StringProperty(required=False)
     user_recommendations = ndb.StringProperty(required=False)
