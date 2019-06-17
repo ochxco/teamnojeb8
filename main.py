@@ -30,12 +30,13 @@ class LoggedInHandler(webapp2.RequestHandler):
     def get(self):
         hometemplate = JINJA_ENVIRONMENT.get_template('templates/homepage.html')
         user = users.get_current_user()
-        email = user.nickname()
+        user.nickname() = User.username
 
         logout_url = users.create_logout_url("/")
 
-        self.response.write("Hello " + email + '. You are logged in. <a href="' + logout_url + '">Click here to log out</a>')
+        self.response.write("Hello " + User.username + '. You are logged in. <a href="' + logout_url + '">Click here to log out</a>')
         self.response.write(hometemplate.render())
+        User.put()
 
 class SearchBarHandler(webapp2.RequestHandler):
     def get(self):
