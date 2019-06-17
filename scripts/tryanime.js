@@ -11,8 +11,10 @@ function processResponse(json) {
     let img = json.data[i].attributes.posterImage['medium'];
     let titles=json.data[i].attributes.canonicalTitle;
     let synopsis= json.data[i].attributes.synopsis;
+    let mangaid=json.data[i].id;
+    let mangastring='/manga/'+mangaid;
 
-    $('#images').append('<div class="info"><img src="' + img+' " >'+'<a class= "title" href="/manga">'+titles+'</p></div>');
+    $('#images').append('<div class="info"><img src="' + img+' " >'+'<a class= "title" href="'+mangastring+' ">'+titles+'</p></div>');
   }
   //$('#images').append('<img src="' + img_url+' " >'+'<br>'+titles);
 
