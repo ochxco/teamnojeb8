@@ -6,6 +6,7 @@ from google.appengine.api import urlfetch
 import json
 from google.appengine.ext import ndb
 from models import Manga, User
+import re
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -57,11 +58,33 @@ class SearchBarHandler(webapp2.RequestHandler):
         for i in range(len(response_as_json['data'])):
             image_url=response_as_json['data'][i]['attributes']['posterImage']['medium']
             titles=response_as_json['data'][i]['attributes']['canonicalTitle']
-            d[i]=[image_url,titles]
-        print(d)
+            mangaid=response_as_json['data'][i]['id']
+            d[i]=[image_url,titles,mangaid]
+        #print(d)
         dd = {'d': d}
         self.response.write(searchtemplate.render(dd))
+class MangaHandler(webapp2.RequestHandler):
+    def get(self, name):
+        mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
+        print(name)
+        name1 = name.replace('_', '%20')
+        #print(name1)
+        endpoint_url='https://kitsu.io/api/edge/manga/'+name1
+        print(endpoint_url)
+        response = urlfetch.fetch(endpoint_url)
+        #print(response.status_code)
+        content = response.content
+        print(content)
+        response_as_json = json.loads(content)
+        print(response_as_json)
+        d={}
+        image_url=response_as_json['data']['attributes']['posterImage']['medium']
+        titles=response_as_json['data']['attributes']['canonicalTitle']
+        synopsis=response_as_json['data']['attributes']['synopsis']
+        d['info']=[image_url,titles,synopsis]
+        print(d)
 
+        self.response.write(mangatemplate.render(d))
 
 
 def CalculateRating(manga_id,rating):
@@ -78,4 +101,5 @@ app = webapp2.WSGIApplication([
     ('/login', NoUserHandler),
     ('/homepage', LoggedInHandler),
     ('/search', SearchBarHandler),
+    ('/manga/(\w+)', MangaHandler),
 ], debug=True)

@@ -14,7 +14,7 @@
     {% for key,value in d.items() %}
       <div class="info">
         <img src={{value[0]}}>
-        <p> {{value[1]}} </p>
+          <a class = 'title' href='/manga/{{value[2]}}'> {{value[1]}} </a>
       </div>
     {% endfor %}
     </div>
