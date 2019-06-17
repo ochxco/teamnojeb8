@@ -67,17 +67,22 @@ class NoUserHandler(webapp2.RequestHandler):
 #user is loggedin
 class LoggedInHandler(webapp2.RequestHandler):
     def get(self):
-        hometemplate = JINJA_ENVIRONMENT.get_template('templates/homepage.html')
         user = users.get_current_user()
-        # object_name = User(email=user.email(),username=user.nickname())
-        # object_name.put()
-        logout_url = users.create_logout_url("/")
-        d = {'logout': logout_url}
-        manga_user = MangaUser.query().filter(MangaUser.email == user.nickname()).fetch()
-        # print(manga_user)
-        self.response.write("Hello " + manga_user[0].username + '. You are logged in.')
-        self.response.write(hometemplate.render(d))
-
+        if user:
+            manga_user = MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+            # If the user is registered...
+            if manga_user:
+                hometemplate = JINJA_ENVIRONMENT.get_template('templates/homepage.html')
+                logout_url = users.create_logout_url("/")
+                d = {'logout': logout_url}
+                manga_user = MangaUser.query().filter(MangaUser.email == user.nickname()).fetch()
+                # print(manga_user)
+                self.response.write("Hello " + manga_user[0].username + '. You are logged in.')
+                self.response.write(hometemplate.render(d))
+            else:
+                self.response.write('Pls sign up for our page')
+        else:
+            self.response.write("Sorry, this page is only for logged in users.")
 
 class SearchBarHandler(webapp2.RequestHandler):
     def get(self):
