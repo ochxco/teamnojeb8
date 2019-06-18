@@ -7,27 +7,19 @@ function closeForm() {
   console.log('Button is clicked')
   $("#myForm").hide();
 }
-function CheckDecimal(inputtxt) {
-  var decimal=  /^[+]?[0-9]+\.[0-9]+$/;
-  if(inputtxt.match(decimal)) {
-    if (inputtxt<0||inputtxt>10){
-      event.preventDefault();
-      alert("pls enter a valid no.")
-      return false;
-    }
-    else{
-      return true;}
-  }
-  else{
-    event.preventDefault();
-    alert("pls enter a valid no.")
-    return false;
-  }
-}
+
 function onButtonClick() {
   let val= $('#rating').val();
-  CheckDecimal(val);
+  if (isNaN(val)==true){
+    event.preventDefault();
+    alert("pls enter a valid no.");
+  }
+  else if (val<0||val>10){
+    event.preventDefault();
+    alert("pls enter a valid no.");
+  }
 }
+
 function init() {
   $('.btncancel').click(closeForm);
   $('.open-button').click(openForm);

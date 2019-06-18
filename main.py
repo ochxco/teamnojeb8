@@ -40,11 +40,13 @@ class MainPageHandler(webapp2.RequestHandler):
   def post(self):
     # Code to handle a first-time registration from the form:
     user = users.get_current_user()
+    name=self.request.get('username')
     manga_user = MangaUser(
         username=self.request.get('username'),
         email=user.nickname(),
         user_ratings={},
-        user_reviews={})
+        user_reviews={},
+        friends_list={})
     manga_user.put()
     self.response.write('Thanks for signing up, %s! <br>Go to the <a href="/homepage">Home</a> page' %
         manga_user.username)
@@ -88,11 +90,11 @@ class SearchBarHandler(webapp2.RequestHandler):
             error='No manga found. Check your spelling'
         else:
             error=''
-        for i in range(len(response_as_json['data'])):
-            image_url=response_as_json['data'][i]['attributes']['posterImage']['medium']
-            titles=response_as_json['data'][i]['attributes']['canonicalTitle']
-            mangaid=response_as_json['data'][i]['id']
-            d[i]=[image_url,titles,mangaid]
+            for i in range(len(response_as_json['data'])):
+                image_url=response_as_json['data'][i]['attributes']['posterImage']['medium']
+                titles=response_as_json['data'][i]['attributes']['canonicalTitle']
+                mangaid=response_as_json['data'][i]['id']
+                d[i]=[image_url,titles,mangaid]
         #print(d)
         dd = {'d': d, 'e':error}
         self.response.write(searchtemplate.render(dd))
