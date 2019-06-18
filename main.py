@@ -6,6 +6,7 @@ from google.appengine.api import urlfetch
 import json
 from google.appengine.ext import ndb
 from models import Manga, MangaUser
+import random
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -67,9 +68,33 @@ class LoggedInHandler(webapp2.RequestHandler):
                 hometemplate = JINJA_ENVIRONMENT.get_template('templates/homepage.html')
                 logout_url = users.create_logout_url("/")
                 d = {'logout': logout_url}
-                manga_user = MangaUser.query().filter(MangaUser.email == user.nickname()).fetch()
+                manga_user = MangaUser.query().filter(MangaUser.email == user.nickname()).get()
                 # print(manga_user)
-                self.response.write("Hello " + manga_user[0].username + '. You are logged in.')
+                mangausers = MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
+                print(mangausers)
+
+                e={}
+                f={}
+                for i in range(len(mangausers)):
+                    if mangausers[i].username not in manga_user.friends_list:
+                        e[i]={'key':mangausers[i].key,
+                              'username': mangausers[i].username,
+                              'rating':mangausers[i].user_ratings,
+                              'reviews':mangausers[i].user_reviews}
+                    else:
+                        f[i]={'key':mangausers[i].key,
+                              'username': mangausers[i].username,
+                              'rating':mangausers[i].user_ratings,
+                              'reviews':mangausers[i].user_reviews}
+                if len(e)-5>0:
+                    list = generaterandom(len(e))
+                    for i in range(len(list)):
+                        del e[list[i]]
+                d['e']=e
+                d['f']=f
+                # print(d['e'][0]['key'].id())
+
+                self.response.write("Hello " + manga_user.username + '. You are logged in.')
                 self.response.write(hometemplate.render(d))
             else:
                 self.response.write('Pls sign up for our page')
@@ -163,6 +188,50 @@ class MangaHandler(webapp2.RequestHandler):
         manga_user.put()
         self.response.write(mangatemplate.render(d))
 
+class FriendHandler(webapp2.RequestHandler):
+    def get(self,name):
+        friendtemplate = JINJA_ENVIRONMENT.get_template('templates/friend.html')
+        user = users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        logout_url = users.create_logout_url("/")
+        mangauser=MangaUser.query().fetch()
+        text=''
+        d={}
+        name1 = int(name)
+        for i in range(len(mangauser)):
+            if mangauser[i].key.id() == name1:
+                d={'username': mangauser[i].username, 'id':name1}
+        if d['username'] not in manga_user.friends_list:
+            text = "Click to follow user"
+        else:
+            text='Following. Click to Unfollow'
+        d['text']=text
+        d['logout']=logout_url
+        self.response.write(friendtemplate.render(d))
+    def post(self,name):
+        friendtemplate = JINJA_ENVIRONMENT.get_template('templates/friend.html')
+        user = users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        logout_url = users.create_logout_url("/")
+        mangauser=MangaUser.query().fetch()
+        text=''
+        d={}
+        name1 = int(name)
+        for i in range(len(mangauser)):
+            if mangauser[i].key.id() == name1:
+                d={'username': mangauser[i].username, 'id':name1, 'friend':mangauser[i]}
+        if d['username'] not in manga_user.friends_list:
+            manga_user.followfriend(d['friend'])
+            text='Following. Click to unfollow'
+        else:
+            manga_user.removefriend(d['friend'])
+            text='Click to follow user'
+        manga_user.put()
+        print(manga_user)
+        d['text']=text
+        d['logout']=logout_url
+        self.response.write(friendtemplate.render(d))
+
 def CalculateRating(manga_id,rating):
     Manga.total_ratings.append(rating)
     sum = 0
@@ -171,6 +240,15 @@ def CalculateRating(manga_id,rating):
     Manga.average_ratings = sum
     Manga.put()
 
+def generaterandom(length):
+    listofrandom=[]
+    while len(listofrandom)!=length-5:
+        no= random.randint(0,length-1)
+        if no not in listofrandom:
+            listofrandom.append(no)
+    return (listofrandom)
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPageHandler),
@@ -178,4 +256,5 @@ app = webapp2.WSGIApplication([
     ('/homepage', LoggedInHandler),
     ('/search', SearchBarHandler),
     ('/manga/(\w+)', MangaHandler),
+    ('/friend/(\w+)', FriendHandler),
 ], debug=True)

@@ -27,6 +27,24 @@
     <div>
       <h2> Favourites: </h2>
     </div>
+    <div>
+      <h2> Friend Recommendations: </h2>
+      {% for key,value in e.items() %}
+        <div class="friendsuggestion">
+          <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+
+        </div>
+      {% endfor %}
+    </div>
+    <div>
+      <h2> Friends: </h2>
+      {% for key,value in f.items() %}
+        <div class="friends">
+          <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+
+        </div>
+      {% endfor %}
+    </div>
   </body>
 
 </html>
