@@ -108,8 +108,7 @@ class SearchBarHandler(webapp2.RequestHandler):
 class MangaHandler(webapp2.RequestHandler):
     def get(self, name):
         mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
-        # print(name)
-        #print(name1)
+        # print (name)
         text=''
         user = users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
@@ -132,7 +131,7 @@ class MangaHandler(webapp2.RequestHandler):
         mangaid=response_as_json['data']['id']
         d['info']=[image_url,titles,synopsis,mangaid,text]
         # print(d)
-        print(manga_user)
+        # print(manga_user)
         self.response.write(mangatemplate.render(d))
     def post( self,name):
         # print(name)
