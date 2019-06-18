@@ -52,7 +52,9 @@ class MainPageHandler(webapp2.RequestHandler):
     user = users.get_current_user()
     manga_user = MangaUser(
         username=self.request.get('username'),
-        email=user.nickname())
+        email=user.nickname(),
+        user_ratings={},
+        user_reviews={})
     manga_user.put()
     self.response.write('Thanks for signing up, %s! <br>Go to the <a href="/homepage">Home</a> page' %
         manga_user.username)
@@ -134,6 +136,13 @@ class MangaHandler(webapp2.RequestHandler):
         # print(d)
         # print(manga_user)
         self.response.write(mangatemplate.render(d))
+        manga = Manga(
+            manga_id=d['info'][3],
+            manga_title = d['info'][1],
+            reviews={},
+            total_ratings={},
+        )
+        manga.put()
     def post( self,name):
         # print(name)
         mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
@@ -143,6 +152,7 @@ class MangaHandler(webapp2.RequestHandler):
         rating = self.request.get("rating")
         review = self.request.get('review')
         endpoint_url='https://kitsu.io/api/edge/manga/'+name
+
         # print(endpoint_url)
         response = urlfetch.fetch(endpoint_url)
         #print(response.status_code)
@@ -168,7 +178,14 @@ class MangaHandler(webapp2.RequestHandler):
 
         # print(manga_user.user_ratings)
         manga_user.put()
-
+        manga = Manga.query().filter(Manga.manga_title == d['info'][3]).fetch()
+        print (manga)
+        #manga.manga_id = name
+        #manga.reviews.append(review)
+        #manga.ratings.append(rating)
+        #anga.put()
+        for review in len(manga.reviews):
+            pass
         self.response.write(mangatemplate.render(d))
 
 def CalculateRating(manga_id,rating):
