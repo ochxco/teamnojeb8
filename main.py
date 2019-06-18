@@ -161,7 +161,7 @@ class MangaHandler(webapp2.RequestHandler):
         manga_user.put()
         self.response.write(mangatemplate.render(d))
 
-def CalculateRating(Manga,rating):
+def CalculateRating(manga_id,rating):
     Manga.total_ratings.append(rating)
     sum = 0
     for n in manga.total_ratings:
