@@ -13,7 +13,8 @@ class MangaUser(ndb.Model):
     friends_list = ndb.StringProperty(required=False)
     groups = ndb.StringProperty(required=False)
     user_recommendations = ndb.StringProperty(required=False)
-    user_ratings = ndb.StringProperty(required=False)
+    user_ratings = ndb.JsonProperty(required=False)
+    user_reviews = ndb.JsonProperty(required=False)
 
 class Group(ndb.Model):
     chat = ndb.StringProperty(required=False)

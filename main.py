@@ -110,6 +110,13 @@ class MangaHandler(webapp2.RequestHandler):
         mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
         # print(name)
         #print(name1)
+        text=''
+        user = users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        if name in manga_user.user_ratings:
+            text = 'You have already rated this manga. Do you want to rate this again?'
+        else:
+            text = 'Rate this manga'
         endpoint_url='https://kitsu.io/api/edge/manga/'+name
         # print(endpoint_url)
         response = urlfetch.fetch(endpoint_url)
@@ -122,11 +129,47 @@ class MangaHandler(webapp2.RequestHandler):
         image_url=response_as_json['data']['attributes']['posterImage']['medium']
         titles=response_as_json['data']['attributes']['canonicalTitle']
         synopsis=response_as_json['data']['attributes']['synopsis']
-        d['info']=[image_url,titles,synopsis]
+        mangaid=response_as_json['data']['id']
+        d['info']=[image_url,titles,synopsis,mangaid,text]
         # print(d)
+        print(manga_user)
+        self.response.write(mangatemplate.render(d))
+    def post( self,name):
+        # print(name)
+        mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
+        user = users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        # print(manga_user.user_ratings)
+        rating = self.request.get("rating")
+        review = self.request.get('review')
+        endpoint_url='https://kitsu.io/api/edge/manga/'+name
+        # print(endpoint_url)
+        response = urlfetch.fetch(endpoint_url)
+        #print(response.status_code)
+        content = response.content
+        # print(content)
+        response_as_json = json.loads(content)
+        # print(response_as_json)
+        d={}
+        image_url=response_as_json['data']['attributes']['posterImage']['medium']
+        titles=response_as_json['data']['attributes']['canonicalTitle']
+        synopsis=response_as_json['data']['attributes']['synopsis']
+        mangaid=response_as_json['data']['id']
+        text = 'You have already rated this manga. Do you want to rate this again?'
+        d['info']=[image_url,titles,synopsis,mangaid,text]
+        # print(rating)
+        if rating =='' and review =='':
+            pass
+        elif review =='':
+            manga_user.user_ratings[name]=float(rating)
+        else:
+            manga_user.user_ratings[name]=float(rating)
+            manga_user.user_reviews[name]=review
+
+        # print(manga_user.user_ratings)
+        manga_user.put()
 
         self.response.write(mangatemplate.render(d))
-
 
 def CalculateRating(Manga,rating):
     Manga.total_ratings.append(rating)
