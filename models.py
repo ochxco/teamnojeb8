@@ -7,13 +7,15 @@ class Manga(ndb.Model):
     reccomendations_value = ndb.IntegerProperty(required=False)
     genre = ndb.StringProperty(required=False)
 
-class User(ndb.Model):
+class MangaUser(ndb.Model):
     email = ndb.StringProperty(required=True)
+    username = ndb.StringProperty(required=True)
     friends_list = ndb.StringProperty(required=False)
     groups = ndb.StringProperty(required=False)
     user_recommendations = ndb.StringProperty(required=False)
-    user_ratings = ndb.StringProperty(required=False)
+    user_ratings = ndb.JsonProperty(required=False)
+    user_reviews = ndb.JsonProperty(required=False)
 
 class Group(ndb.Model):
     chat = ndb.StringProperty(required=False)
-    members = ndb.KeyProperty(User)
+    members = ndb.KeyProperty(MangaUser)

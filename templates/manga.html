@@ -2,17 +2,29 @@
 <html>
   <head>
     <meta charset ='utf-8'>
-    <title>tryanimes</title>
+    <title>Manga</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="/scripts/tryanime.js"></script>
-    <link rel="stylesheet" href="/styles/tryanime.css"/>
+    <script src="/scripts/manga.js"></script>
+    <link rel="stylesheet" href="/styles/manga.css">
   </head>
   <body>
-    <h3>{{info[1]}}</h3>
-    <img src={{info[0]}}>
-
-    <h5>{{info[2]}}</h5>
-
+    <div id='mangainfo'>
+      <h3>{{info[1]}}</h3>
+      <img src={{info[0]}}>
+      <h4>SYNOPSIS: {{info[2]}}</h4>
+    </div>
+    <button class="open-button">Rate this Manga</button>
+    <div class="form-popup" id="myForm">
+      <form method=POST action="/manga/{{info[3]}}" class="form-container">
+        <h2>{{info[4]}}</h2>
+        <div ><b>Rate This Manga (out of 10)</b></div>
+        <input type="text" placeholder="Enter a score..." name="rating" id='rating'>
+        <div id='review'><b>Review This Manga</b></div>
+        <input type="text" placeholder="Enter a review..." name="review" class='review'>
+        <button type="submit" class="btn" id='submit'>Submit</button>
+      </form>
+      <button class="btncancel">Close</button>
+    </div>
   </body>
 
 </html>

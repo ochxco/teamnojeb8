@@ -2,15 +2,16 @@
 <html>
   <head>
     <meta charset ='utf-8'>
-    <title>tryanimes</title>
+    <title>Search Results</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <script src="/scripts/tryanime.js"></script>
     <link rel="stylesheet" href="/styles/tryanime.css"/>
   </head>
   <body>
     <input type='textbox' id ='searchterm' value='{{search}}'></input>
-    <div id ='clicks'>Click here</div>
+    <button id ='clicks' >Search</button>
     <div class='searchresult'>
+    {{e}}
     {% for key,value in d.items() %}
       <div class="info">
         <img src={{value[0]}}>
