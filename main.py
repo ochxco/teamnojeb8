@@ -85,9 +85,6 @@ class LoggedInHandler(webapp2.RequestHandler):
             self.response.write("Sorry, this page is only for logged in users.")
 
 class SearchBarHandler(webapp2.RequestHandler):
-    def get(self):
-        searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime.html')
-        self.response.write(searchtemplate.render())
     def post(self):
         searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime1.html')
         searchTerm=self.request.get('search')
@@ -97,13 +94,17 @@ class SearchBarHandler(webapp2.RequestHandler):
         content = response.content
         response_as_json = json.loads(content)
         d={}
+        if response_as_json['data']==[]:
+            error='No manga found. Check your spelling'
+        else:
+            error=''
         for i in range(len(response_as_json['data'])):
             image_url=response_as_json['data'][i]['attributes']['posterImage']['medium']
             titles=response_as_json['data'][i]['attributes']['canonicalTitle']
             mangaid=response_as_json['data'][i]['id']
             d[i]=[image_url,titles,mangaid]
         #print(d)
-        dd = {'d': d}
+        dd = {'d': d, 'e':error}
         self.response.write(searchtemplate.render(dd))
 class MangaHandler(webapp2.RequestHandler):
     def get(self, name):

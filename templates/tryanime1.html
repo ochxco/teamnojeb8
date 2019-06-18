@@ -11,6 +11,7 @@
     <input type='textbox' id ='searchterm' value='{{search}}'></input>
     <button id ='clicks' >Search</button>
     <div class='searchresult'>
+    {{e}}
     {% for key,value in d.items() %}
       <div class="info">
         <img src={{value[0]}}>
