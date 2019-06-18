@@ -29,7 +29,7 @@ form button[type=submit]{
   word-wrap: break-word;
 }
 
-form input[type=submit]:hover {
+form button[type=submit]:hover {
   background: #0b7dda;
 }
 
