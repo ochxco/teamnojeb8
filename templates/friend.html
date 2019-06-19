@@ -9,13 +9,15 @@
   </head>
   <body>
     <div class='header'>
-      <h2> <a href='/'>Homepage</a> </h2>
-      <h2>  <a href={{logout}}>Logout</a> </h2>
+      <h2> <a href='/homepage' id="homebut"> YourMangaTracker </a> </h2>
+      <h2> <a href="/profile" id="profbut"> Your Profile </a> </h2>
+      <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
     <h1>User's Profile</h1>
+    <img src={{}}></img>
     <h3>Username: {{username}}</h3>
     <h3> Favorites </h3>
-    
+
     <form method =POST action='/friend/{{id}}'>
       <button type='submit'>{{text}}</button>
     </form>

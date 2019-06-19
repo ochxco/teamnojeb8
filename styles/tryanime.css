@@ -31,3 +31,42 @@ img {
   flex-direction: row;
   flex-wrap: wrap;
 }
+
+button{
+  float: left;
+  width: 23%;
+  height:42px;
+  padding: 5px;
+  background: #2196F3;
+  color: white;
+  font-size: 14px;
+  border: 1px solid grey;
+  border-left: none; /* Prevent double borders */
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: rgb(123, 158, 158);
+}
+/* this stuff down for links in header */
+#homebut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(123, 158, 158);
+}
+
+#profbut{
+  align-content: right;
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(62, 132, 27);
+}
+
+#logoutbut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(244, 83, 66)
+}
