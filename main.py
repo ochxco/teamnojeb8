@@ -99,9 +99,6 @@ class LoggedInHandler(webapp2.RequestHandler):
                             h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
 
                 d['h']=h
-                #     if name == mangaquery[i].manga_id:
-                #         manga = mangaquery[i]
-                # d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,text]
                 for i in range(len(mangausers)):
                     if mangausers[i].username not in manga_user.friends_list:
                         e[i]={'key':mangausers[i].key,
@@ -176,17 +173,29 @@ class MangaHandler(webapp2.RequestHandler):
         d={}
         d['logout']=logout_url
         favoritetext=''
+        friendrating='No ratings yet'
+        d['reviews']={'No review yet':''}
         mangaquery = Manga.query().fetch()
         boolean=False
+        totalrating= 0
+        count=0
         for i in range(len(mangaquery)):
             if name == mangaquery[i].manga_id:
                 manga = mangaquery[i]
                 boolean =True
                 d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,manga.api_ratings,manga.chapter,text]
-                print(manga.total_ratings)
+                if manga.total_ratings != {}:
+                    for key,value in manga.total_ratings.items():
+                        if key in manga_user.friends_list:
+                            totalrating=totalrating+value
+                            count = count +1
+                if manga.reviews !={}:
+                    d['reviews']=manga.reviews
                 break;
             else:
                 boolean=False
+
+        # print(d['reviews'])
         if boolean == False:
             endpoint_url='https://kitsu.io/api/edge/manga/'+name
             response = urlfetch.fetch(endpoint_url)
@@ -198,8 +207,12 @@ class MangaHandler(webapp2.RequestHandler):
             mangaid=response_as_json['data']['id']
             averagerating=response_as_json['data']['attributes']['averageRating']
             chapter=response_as_json['data']['attributes']['chapterCount']
-            averagerating=round(float(averagerating)/10,1)
-            d['info']=[image_url,titles,synopsis,mangaid,averagerating,chapter, text]
+            if averagerating>0:
+                averageratin=str(round(float(averagerating)/10,1))+'/10'
+            else:
+                averageratin='None'
+
+            d['info']=[image_url,titles,synopsis,mangaid,averageratin,chapter, text]
             manga = Manga(
                  manga_id=mangaid,
                  manga_title = titles,
@@ -207,10 +220,13 @@ class MangaHandler(webapp2.RequestHandler):
                  synopsis=synopsis,
                  reviews={},
                  total_ratings={},
-                 api_ratings=averagerating,
+                 api_ratings=averageratin,
                  chapter=chapter,
             )
             manga.put()
+        if count !=0:
+            averageuserrating=round((totalrating/count),1)
+            friendrating=str(averageuserrating)+'/10'
 
         if name not in manga_user.favorites:
             favoritetext='Add to favorites'
@@ -218,50 +234,72 @@ class MangaHandler(webapp2.RequestHandler):
             favoritetext='Added to favorites'
         # print(manga_user)
         d['favoritetext']=favoritetext
+        d['averageuserrating']=friendrating
+
         self.response.write(mangatemplate.render(d))
 
     def post(self,name):
         # print(type(name))
         mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
+
         user = users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
-        # print(manga_user.user_ratings)
         logout_url = users.create_logout_url("/")
-        rating = self.request.get("rating")
-        reviews = self.request.get('review')
-        text = 'You have already rated this manga. Do you want to rate this again?'
-
         d={}
+        totalrating= 0
+        count=0
+        favoritetext=''
+        d['reviews']={'No review yet':''}
+        friendrating='No ratings yet'
         mangaquery=Manga.query().fetch()
         for i in range(len(mangaquery)):
             if name == mangaquery[i].manga_id:
                 manga = mangaquery[i]
-        d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,manga.api_ratings,manga.chapter,text]
-
-        if rating =='' and reviews =='':
-            pass
-        elif reviews =='':
-            manga_user.user_ratings[name]=float(rating)
-            manga.total_ratings[manga_user.username]=float(rating)
-        else:
-            manga_user.user_ratings[name]=float(rating)
-            manga_user.user_reviews[name]=reviews
-            manga.total_ratings[manga_user.username]=float(rating)
-            manga.reviews[manga_user.username]= reviews
-
-        # print(manga_user.user_ratings)
-        manga_user.put()
-        manga.put()
-        favoritetext=''
+                d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,manga.api_ratings,manga.chapter]
+                if manga.total_ratings != {}:
+                    for key,value in manga.total_ratings.items():
+                        if key in manga_user.friends_list:
+                            totalrating=totalrating+value
+                            count = count +1
+                if manga.reviews !={}:
+                    d['reviews']=manga.reviews
+        print(manga.reviews)
+        if count !=0:
+            averageuserrating=round((totalrating/count),1)
+            friendrating=str(averageuserrating)+'/10'
+        d['averageuserrating']=friendrating
 
         if name not in manga_user.favorites:
-            manga_user.favorites[name]=[manga.manga_title, manga.imgurl]
-            favoritetext='Added to favorites'
-        else:
-            del manga_user.favorites[name]
             favoritetext='Add to favorites'
-        manga_user.put()
-        print(manga)
+        else:
+            favoritetext='Added to favorites'
+        if 'favorites' in self.request.POST:
+            if name not in manga_user.favorites:
+                manga_user.favorites[name]=[manga.manga_title, manga.imgurl]
+                favoritetext='Added to favorites'
+            else:
+                del manga_user.favorites[name]
+                favoritetext='Add to favorites'
+            manga_user.put()
+        else:
+            rating = self.request.get("rating")
+            reviews = self.request.get('review')
+            text = 'You have already rated this manga. Do you want to rate this again?'
+            d['info'].append(text)
+            if rating =='' and reviews =='':
+                pass
+            elif reviews =='':
+                manga_user.user_ratings[name]=float(rating)
+                manga.total_ratings[manga_user.username]=float(rating)
+            else:
+                manga_user.user_ratings[name]=float(rating)
+                manga_user.user_reviews[name]=reviews
+                manga.total_ratings[manga_user.username]=float(rating)
+                manga.reviews[manga_user.username]= reviews
+            manga_user.put()
+            manga.put()
+
+
         d['logout']=logout_url
         d['favoritetext']=favoritetext
         self.response.write(mangatemplate.render(d))

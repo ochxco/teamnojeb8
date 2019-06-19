@@ -14,6 +14,10 @@ function onButtonClick() {
     event.preventDefault();
     alert("pls enter a valid no.");
   }
+  else if (val ==''){
+    event.preventDefault();
+    alert("pls enter a valid no.");
+  }
   else if (val<0||val>10){
     event.preventDefault();
     alert("pls enter a valid no.");

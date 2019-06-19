@@ -43,8 +43,9 @@ form.example::after {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  font-family: 'Paytone One', sans-serif;
+  margin-top: -30px;
 }
-/* this stuff down for links in header */
 #homebut{
   border: solid 1px black;
   padding: 5px;
@@ -82,5 +83,20 @@ form.example::after {
 }
 .cssimg {
   width: 120px;
-  height: 198px;
+  height: 160px;
+}
+#frenrecbox{
+  display: flex;
+  flex-direction: row;
+  margin:5px;
+}
+.friendsuggestion{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+
+}
+.profilepic{
+  height:100px;
+  width:100px;
 }

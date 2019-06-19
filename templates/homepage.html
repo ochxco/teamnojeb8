@@ -6,12 +6,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <!-- <script src="/scripts/homepage.js"></script> -->
     <link rel="stylesheet" href="/styles/homepage.css">
+    <link href="https://fonts.googleapis.com/css?family=Paytone+One&display=swap" rel="stylesheet">
   </head>
   <body>
     <div class= 'header'>
       <h2> <a href='/homepage' id="homebut"> YourMangaTracker </a> </h2>
       <h2> <a href="/profile" id="profbut"> Your Profile </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
+      
     </div>
     <form method=POST action="/search">
       <input type="text" placeholder="Search.." name="search" id ='searchterm'>
@@ -40,13 +42,16 @@
             </div>
           {% endfor %}
       </div>
-      <div  id='frenrecbox'>
+
       <h2> Friend Recommendations: </h2>
+      <div  id='frenrecbox'>
       {% for key,value in e.items() %}
         <div class="friendsuggestion">
+          <img class='profilepic' src='https://sketchmob.com/wp-content/uploads/2018/06/110748_1e7a40910-720x974.jpg'>
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
-      {% endfor %}
         </div>
+      {% endfor %}
+
     </div>
     <div>
       <h2> Friends: </h2>

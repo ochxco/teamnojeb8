@@ -8,10 +8,8 @@
   border: none;
   cursor: pointer;
   opacity: 0.8;
-  position: absolute;
-  top: 80px;
-  right: 28px;
   width: 200px;
+  margin:10px;
 }
 #favorite {
   background-color: #555;
@@ -20,17 +18,13 @@
   border: none;
   cursor: pointer;
   opacity: 0.8;
-  position: absolute;
-  top: 150px;
-  right: 28px;
   width: 200px;
+  margin:10px;
 }
 /* The popup form - hidden by default */
 .form-popup {
   display: none;
-  position: absolute;
-  top: 80px;
-  right: 15px;
+
   border: 3px solid #f1f1f1;
   z-index: 9;
 }
@@ -77,14 +71,12 @@
   background-color: red;
   color: white;
   padding: 16px 20px;
-  width: 300px;
   border: none;
   cursor: pointer;
-  margin: -10px 0 22px 10px;
+  width: 260px;
   margin-bottom:10px;
   opacity: 0.8;
   text-align: center;
-
 }
 
 /* Add some hover effects to buttons */
@@ -92,23 +84,16 @@
   opacity: 1;
 }
 img {
-  width:300px;
-  height:400px;
+  width:350px;
+  height:450px;
 }
 .header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
-
-.square{
-  display: solid;
-  position: absolute;
-  top: 220px;
-  right: 20px;
-  border: 8px solid grey;
-  width: 250px;
-
+h4{
+  margin-bottom:  -7px;
 }
 
 .revbox{
@@ -117,4 +102,26 @@ img {
   border-style: solid;
   border-width: 1px;
   border-spacing: 20px;
+}
+.userreview{
+  font-size: 23px;
+}
+.buttons{
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+.body {
+  display: flex;
+  flex-direction: row;
+
+  padding:5px;
+  border-bottom: 1px solid black;
+}
+#mangainfo{
+  margin-top:-15px;
+  margin-left:7px;
+  display:flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

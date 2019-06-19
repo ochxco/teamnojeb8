@@ -5,11 +5,13 @@ class Manga(ndb.Model):
     manga_title = ndb.StringProperty(required=True)
     total_ratings = ndb.JsonProperty(required=False)
     average_ratings = ndb.FloatProperty(required=False)
+    api_ratings=ndb.StringProperty(required = True)
     reccomendations_value = ndb.IntegerProperty(required=False)
     genre = ndb.StringProperty(required=False)
     reviews = ndb.JsonProperty(required=True)
     imgurl = ndb.StringProperty(required=True)
-    synopsis = ndb.StringProperty(required = True)
+    synopsis = ndb.TextProperty(required = True)
+    chapter = ndb.IntegerProperty(required = False)
 
 class MangaUser(ndb.Model):
     email = ndb.StringProperty(required=True)
