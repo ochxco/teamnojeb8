@@ -40,16 +40,30 @@ class MainPageHandler(webapp2.RequestHandler):
     # Code to handle a first-time registration from the form:
     user = users.get_current_user()
     name=self.request.get('username')
-    manga_user = MangaUser(
-        username=self.request.get('username'),
-        email=user.nickname(),
-        user_ratings={},
-        user_reviews={},
-        friends_list={},
-        favorites={})
-    manga_user.put()
-    self.response.write('Thanks for signing up, %s! <br>Go to the <a href="/homepage">Home</a> page' %
-        manga_user.username)
+    d = MangaUser.query().filter(MangaUser.username == name).fetch()
+    print(d)
+    if d == []:
+        manga_user = MangaUser(
+            username=self.request.get('username'),
+            email=user.nickname(),
+            user_ratings={},
+            user_reviews={},
+            friends_list={},
+            favorites={})
+        manga_user.put()
+        self.response.write('Thanks for signing up, %s! <br>Go to the <a href="/homepage">Home</a> page' %
+                manga_user.username)
+    else:
+        self.redirect('/loginagain')
+
+
+class Nametaken(webapp2.RequestHandler):
+    def get(self):
+        login_url = users.create_login_url("/")
+        self.response.write('Your username is already taken. <a href="' + login_url + '">Click here to login</a>')
+    #def get(self):
+        #login_url = users.create_login_url("/")
+        #self.response.write('Please log in. <a href="' + login_url + '">Click here to login</a>')
 
 class NoUserHandler(webapp2.RequestHandler):
     def get(self):
@@ -320,4 +334,5 @@ app = webapp2.WSGIApplication([
     ('/search', SearchBarHandler),
     ('/manga/(\w+)', MangaHandler),
     ('/friend/(\w+)', FriendHandler),
+    ('/loginagain', Nametaken),
 ], debug=True)
