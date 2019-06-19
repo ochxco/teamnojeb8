@@ -78,9 +78,11 @@ class LoggedInHandler(webapp2.RequestHandler):
                 listofrandom=[]
                 list=[]
                 print(manga_user.favorites.keys())
-                for i in range(len(manga_user.favorites.keys())):
-                    mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
-                    h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
+                if Manga.query().fetch()!=[]:
+                    for i in range(len(manga_user.favorites.keys())):
+                        mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
+                        if mangaquery:
+                            h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
 
                 d['h']=h
                 #     if name == mangaquery[i].manga_id:
@@ -166,8 +168,8 @@ class MangaHandler(webapp2.RequestHandler):
             if name == mangaquery[i].manga_id:
                 manga = mangaquery[i]
                 boolean =True
-                d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,text]
-
+                d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,manga.api_ratings,manga.chapter,text]
+                print(manga.total_ratings)
                 break;
             else:
                 boolean=False
@@ -180,7 +182,10 @@ class MangaHandler(webapp2.RequestHandler):
             titles=response_as_json['data']['attributes']['canonicalTitle']
             synopsis=response_as_json['data']['attributes']['synopsis']
             mangaid=response_as_json['data']['id']
-            d['info']=[image_url,titles,synopsis,mangaid,text]
+            averagerating=response_as_json['data']['attributes']['averageRating']
+            chapter=response_as_json['data']['attributes']['chapterCount']
+            averagerating=round(float(averagerating)/10,1)
+            d['info']=[image_url,titles,synopsis,mangaid,averagerating,chapter, text]
             manga = Manga(
                  manga_id=mangaid,
                  manga_title = titles,
@@ -188,6 +193,8 @@ class MangaHandler(webapp2.RequestHandler):
                  synopsis=synopsis,
                  reviews={},
                  total_ratings={},
+                 api_ratings=averagerating,
+                 chapter=chapter,
             )
             manga.put()
 
@@ -215,7 +222,7 @@ class MangaHandler(webapp2.RequestHandler):
         for i in range(len(mangaquery)):
             if name == mangaquery[i].manga_id:
                 manga = mangaquery[i]
-        d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,text]
+        d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,manga.api_ratings,manga.chapter,text]
 
         if rating =='' and reviews =='':
             pass
