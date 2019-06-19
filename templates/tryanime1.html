@@ -8,8 +8,15 @@
     <link rel="stylesheet" href="/styles/tryanime.css"/>
   </head>
   <body>
+    <div class= 'header'>
+      <h2> YourMangaTracker </h2>
+      <h2>  <a href={{logout}}>Logout</a> </h2>
+    </div>
     <input type='textbox' id ='searchterm' value='{{search}}'></input>
     <button id ='clicks' >Search</button>
+    <br>
+    <br>
+    <br>
     <div class='searchresult'>
     {{e}}
     {% for key,value in d.items() %}
