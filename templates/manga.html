@@ -10,37 +10,55 @@
   <body>
     <div class='header'>
       <h2> <a href='/'>Homepage</a> </h2>
-      <h2>  <a href={{logout}}>Logout</a> </h2>
+      <h2> <a href={{logout}}>Logout</a> </h2>
     </div>
-    <div id='mangainfo'>
-      <h3>{{info[1]}}</h3>
+
+    <div class='body'>
       <img src={{info[0]}}>
-      <h4>SYNOPSIS: {{info[2]}}</h4>
+
+
+      <div id='mangainfo'>
+        <h1>{{info[1]}}</h1>
+        <h3>SYNOPSIS: {{info[2]}}</h3>
+
+        <div id='square' >
+          <h4>Rated by the community: {{info[4]}}</h4>
+          <h4>Rated by your friends: {{averageuserrating}}</h4>
+          <h4>No. of Chapters: {{info[5]}}</h4>
+        </div>
+        <div class='buttons'>
+          <div class='ratethis'>
+            <button class="open-button">Rate this Manga</button>
+            <div class="form-popup" id="myForm">
+              <form method=POST action="/manga/{{info[3]}}" class="form-container">
+                <h2>{{info[6]}}</h2>
+                <div ><b>Rate This Manga (out of 10)</b></div>
+                <input type="text" placeholder="Enter a score..." name="rating" id='rating'>
+                <div id='review'><b>Review This Manga</b></div>
+                <input type="text" placeholder="Enter a review..." name="review" class='review'>
+                <button type="submit" class="btn" id='submit' name='submitreview'>Submit</button>
+                <div class='btncancel'>Close</div>
+              </form>
+            </div>
+
+
+          </div>
+          <div class='favourite'>
+            <form method=POST action="/manga/{{info[3]}}">
+              <button type='submit' id="favorite" name ='favorites'>{{favoritetext}}</button>
+            </form>
+          </div>
+        </div>
+      </div>
     </div>
-    <button class="open-button">Rate this Manga</button>
-    <div class="form-popup" id="myForm">
-      <form method=POST action="/manga/{{info[3]}}" class="form-container">
-        <h2>{{info[6]}}</h2>
-        <div ><b>Rate This Manga (out of 10)</b></div>
-        <input type="text" placeholder="Enter a score..." name="rating" id='rating'>
-        <div id='review'><b>Review This Manga</b></div>
-        <input type="text" placeholder="Enter a review..." name="review" class='review'>
-        <button type="submit" class="btn" id='submit'>Submit</button>
-      </form>
-      <button class="btncancel">Close</button>
-    </div>
-    <div class='favourite'>
-      <form method = POST action="/manga/{{info[3]}}">
-        <button type='submit' id="favorite">{{favoritetext}}</button>
-      </form>
-    </div>
-    <div class='square' id='summary'>
-      <h5>Rated by the community: {{info[4]}}/10</h5>
-      <h5>Rated by your friends: (score)/10</h5>
-      <h5>No. of Chapters: {{info[5]}}</h5>
-    </div>
+
     <div class="reviews">
-      <h4>REVIEWS:</h4>
+      <h2>REVIEWS:</h2>
+      {% for key,value in reviews.items() %}
+        <div class="userreview">
+          <p>{{key}}: {{value}}</p>
+
+      {% endfor %}
     </div>
 
   </body>
