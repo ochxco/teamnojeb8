@@ -41,7 +41,7 @@ class MainPageHandler(webapp2.RequestHandler):
     user = users.get_current_user()
     name=self.request.get('username')
     d = MangaUser.query().filter(MangaUser.username == name).fetch()
-    print(d)
+    #print(d)
     if d == []:
         manga_user = MangaUser(
             username=self.request.get('username'),
