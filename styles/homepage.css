@@ -40,12 +40,29 @@ form.example::after {
   display: table;
 }
 .header {
-  color: rgb(123, 158, 158);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
+/* this stuff down for links in header */
+#homebut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(123, 158, 158);
+}
 
+#profbut{
+  align-content: right;
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(62, 132, 27);
+}
+
+#logoutbut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(244, 83, 66)
+}
 .favorited{
   display: flex;
   flex-direction: column;
