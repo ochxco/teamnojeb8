@@ -8,6 +8,10 @@
     <link rel="stylesheet" href="/styles/manga.css">
   </head>
   <body>
+    <div class='header'>
+      <h2> <a href='/'>Homepage</a> </h2>
+      <h2>  <a href={{logout}}>Logout</a> </h2>
+    </div>
     <div id='mangainfo'>
       <h3>{{info[1]}}</h3>
       <img src={{info[0]}}>
@@ -24,6 +28,11 @@
         <button type="submit" class="btn" id='submit'>Submit</button>
       </form>
       <button class="btncancel">Close</button>
+    </div>
+    <div class='favourite'>
+      <form method = POST action="/manga/{{info[3]}}">
+        <button type='submit' id="favorite">{{favoritetext}}</button>
+      </form>
     </div>
     <div class="reviews">
     </div>

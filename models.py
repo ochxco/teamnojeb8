@@ -8,6 +8,7 @@ class Manga(ndb.Model):
     reccomendations_value = ndb.IntegerProperty(required=False)
     genre = ndb.StringProperty(required=False)
     reviews = ndb.JsonProperty(required=True)
+    imgurl = ndb.StringProperty(required=True)
 
 class MangaUser(ndb.Model):
     email = ndb.StringProperty(required=True)
@@ -17,6 +18,7 @@ class MangaUser(ndb.Model):
     user_recommendations = ndb.StringProperty(required=False)
     user_ratings = ndb.JsonProperty(required=True)
     user_reviews = ndb.JsonProperty(required=True)
+    favorites = ndb.JsonProperty(required=False)#store image, img title, img id
 
     def followfriend(self, friend):
         self.friends_list[friend.username]=friend.key.id()

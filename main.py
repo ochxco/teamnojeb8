@@ -47,7 +47,8 @@ class MainPageHandler(webapp2.RequestHandler):
         email=user.nickname(),
         user_ratings={},
         user_reviews={},
-        friends_list={})
+        friends_list={},
+        favorites={})
     manga_user.put()
     self.response.write('Thanks for signing up, %s! <br>Go to the <a href="/homepage">Home</a> page' %
         manga_user.username)
@@ -131,7 +132,7 @@ class MangaHandler(webapp2.RequestHandler):
         text=''
         user = users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
-
+        logout_url = users.create_logout_url("/")
         if name in manga_user.user_ratings:
             text = 'You have already rated this manga. Do you want to rate this again?'
         else:
@@ -150,24 +151,26 @@ class MangaHandler(webapp2.RequestHandler):
         synopsis=response_as_json['data']['attributes']['synopsis']
         mangaid=response_as_json['data']['id']
         d['info']=[image_url,titles,synopsis,mangaid,text]
-        # print(d)
+        d['logout']=logout_url
+        favoritetext=''
+
+        if name not in manga_user.favorites:
+            favoritetext='Add to favorites'
+        else:
+            favoritetext='Added to favorites'
         # print(manga_user)
+        d['favoritetext']=favoritetext
         self.response.write(mangatemplate.render(d))
-        manga = Manga(
-            manga_id=d['info'][3],
-            manga_title = d['info'][1],
-            reviews={},
-            total_ratings={},
-        )
-        manga.put()
-    def post( self,name):
-        # print(name)
+
+    def post(self,name):
+        # print(type(name))
         mangatemplate = JINJA_ENVIRONMENT.get_template('templates/manga.html')
         user = users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
         # print(manga_user.user_ratings)
+        logout_url = users.create_logout_url("/")
         rating = self.request.get("rating")
-        review = self.request.get('review')
+        reviews = self.request.get('review')
         endpoint_url='https://kitsu.io/api/edge/manga/'+name
 
         # print(endpoint_url)
@@ -185,23 +188,51 @@ class MangaHandler(webapp2.RequestHandler):
         text = 'You have already rated this manga. Do you want to rate this again?'
         d['info']=[image_url,titles,synopsis,mangaid,text]
         # print(rating)
-        if rating =='' and review =='':
+        mangaquery = Manga.query().fetch()
+        boolean=False
+        for i in range(len(mangaquery)):
+            if name == mangaquery[i].manga_id:
+                manga = mangaquery[i]
+                boolean =True
+                break;
+            else:
+                boolean=False
+        if boolean == False:
+            manga = Manga(
+                 manga_id=mangaid,
+                 manga_title = titles,
+                 imgurl=image_url,
+                 reviews={},
+                 total_ratings={},
+            )
+            manga.put()
+
+        if rating =='' and reviews =='':
             pass
-        elif review =='':
+        elif reviews =='':
             manga_user.user_ratings[name]=float(rating)
+            manga.total_ratings[manga_user.username]=float(rating)
         else:
             manga_user.user_ratings[name]=float(rating)
-            manga_user.user_reviews[name]=review
+            manga_user.user_reviews[name]=reviews
+            manga.total_ratings[manga_user.username]=float(rating)
+            manga.reviews[manga_user.username]= reviews
+
         # print(manga_user.user_ratings)
         manga_user.put()
-        manga = Manga.query().filter(Manga.manga_title == d['info'][3]).fetch()
-        print (manga)
-        #manga.manga_id = name
-        #manga.reviews.append(review)
-        #manga.ratings.append(rating)
-        #anga.put()
-        for review in len(manga.reviews):
-            pass
+        manga.put()
+        favoritetext=''
+
+        if name not in manga_user.favorites:
+            manga_user.favorites[name]=[titles, image_url]
+            favoritetext='Added to favorites'
+        else:
+            del manga_user.favorites[name]
+            favoritetext='Add to favorites'
+        manga_user.put()
+        print(manga)
+        d['logout']=logout_url
+        d['favoritetext']=favoritetext
         self.response.write(mangatemplate.render(d))
 
 class FriendHandler(webapp2.RequestHandler):
