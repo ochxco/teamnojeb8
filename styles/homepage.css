@@ -44,3 +44,11 @@ form.example::after {
   flex-direction: row;
   justify-content: space-between;
 }
+
+.box {
+  margin: 10px;
+  height: 200px;
+  border-style: solid;
+  border-width: 10px 10px 10px 10px;
+  border-spacing: 20px;
+}
