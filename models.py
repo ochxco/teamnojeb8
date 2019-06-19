@@ -9,6 +9,7 @@ class Manga(ndb.Model):
     genre = ndb.StringProperty(required=False)
     reviews = ndb.JsonProperty(required=True)
     imgurl = ndb.StringProperty(required=True)
+    synopsis = ndb.StringProperty(required = True)
 
 class MangaUser(ndb.Model):
     email = ndb.StringProperty(required=True)

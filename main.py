@@ -137,22 +137,39 @@ class MangaHandler(webapp2.RequestHandler):
             text = 'You have already rated this manga. Do you want to rate this again?'
         else:
             text = 'Rate this manga'
-        endpoint_url='https://kitsu.io/api/edge/manga/'+name
-        # print(endpoint_url)
-        response = urlfetch.fetch(endpoint_url)
-        #print(response.status_code)
-        content = response.content
-        # print(content)
-        response_as_json = json.loads(content)
-        # print(response_as_json)
         d={}
-        image_url=response_as_json['data']['attributes']['posterImage']['medium']
-        titles=response_as_json['data']['attributes']['canonicalTitle']
-        synopsis=response_as_json['data']['attributes']['synopsis']
-        mangaid=response_as_json['data']['id']
-        d['info']=[image_url,titles,synopsis,mangaid,text]
         d['logout']=logout_url
         favoritetext=''
+        mangaquery = Manga.query().fetch()
+        boolean=False
+        for i in range(len(mangaquery)):
+            if name == mangaquery[i].manga_id:
+                manga = mangaquery[i]
+                boolean =True
+                d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,text]
+
+                break;
+            else:
+                boolean=False
+        if boolean == False:
+            endpoint_url='https://kitsu.io/api/edge/manga/'+name
+            response = urlfetch.fetch(endpoint_url)
+            content = response.content
+            response_as_json = json.loads(content)
+            image_url=response_as_json['data']['attributes']['posterImage']['medium']
+            titles=response_as_json['data']['attributes']['canonicalTitle']
+            synopsis=response_as_json['data']['attributes']['synopsis']
+            mangaid=response_as_json['data']['id']
+            d['info']=[image_url,titles,synopsis,mangaid,text]
+            manga = Manga(
+                 manga_id=mangaid,
+                 manga_title = titles,
+                 imgurl=image_url,
+                 synopsis=synopsis,
+                 reviews={},
+                 total_ratings={},
+            )
+            manga.put()
 
         if name not in manga_user.favorites:
             favoritetext='Add to favorites'
@@ -171,41 +188,14 @@ class MangaHandler(webapp2.RequestHandler):
         logout_url = users.create_logout_url("/")
         rating = self.request.get("rating")
         reviews = self.request.get('review')
-        endpoint_url='https://kitsu.io/api/edge/manga/'+name
-
-        # print(endpoint_url)
-        response = urlfetch.fetch(endpoint_url)
-        #print(response.status_code)
-        content = response.content
-        # print(content)
-        response_as_json = json.loads(content)
-        # print(response_as_json)
-        d={}
-        image_url=response_as_json['data']['attributes']['posterImage']['medium']
-        titles=response_as_json['data']['attributes']['canonicalTitle']
-        synopsis=response_as_json['data']['attributes']['synopsis']
-        mangaid=response_as_json['data']['id']
         text = 'You have already rated this manga. Do you want to rate this again?'
-        d['info']=[image_url,titles,synopsis,mangaid,text]
-        # print(rating)
-        mangaquery = Manga.query().fetch()
-        boolean=False
+
+        d={}
+        mangaquery=Manga.query().fetch()
         for i in range(len(mangaquery)):
             if name == mangaquery[i].manga_id:
                 manga = mangaquery[i]
-                boolean =True
-                break;
-            else:
-                boolean=False
-        if boolean == False:
-            manga = Manga(
-                 manga_id=mangaid,
-                 manga_title = titles,
-                 imgurl=image_url,
-                 reviews={},
-                 total_ratings={},
-            )
-            manga.put()
+        d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,text]
 
         if rating =='' and reviews =='':
             pass
@@ -224,7 +214,7 @@ class MangaHandler(webapp2.RequestHandler):
         favoritetext=''
 
         if name not in manga_user.favorites:
-            manga_user.favorites[name]=[titles, image_url]
+            manga_user.favorites[name]=[manga.manga_title, manga.imgurl]
             favoritetext='Added to favorites'
         else:
             del manga_user.favorites[name]

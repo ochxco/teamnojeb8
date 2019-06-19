@@ -88,7 +88,7 @@
 }
 
 /* Add some hover effects to buttons */
-.form-container .btn:hover, .open-button:hover, .btncancel:hover{
+.form-container .btn:hover, .open-button:hover, .btncancel:hover, #favorite:hover{
   opacity: 1;
 }
 img {
