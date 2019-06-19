@@ -44,13 +44,25 @@ form.example::after {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .favorited{
   display: flex;
   flex-direction: column;
+  width: 120px;
+  margin:5px
 
 }
-.favorite{
+#favorite{
   display: flex;
   flex-direction: row;
+}
 
+.box {
+  width: fit-content;
+  border: solid 1px black;
+
+}
+.recimg {
+  width: 120px;
+  height: 198px;
 }

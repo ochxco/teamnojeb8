@@ -2,14 +2,14 @@
 <html>
   <head>
     <meta charset ='utf-8'>
-    <title>Home Page!</title>
+    <title>YourMangaTracker!</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <!-- <script src="/scripts/homepage.js"></script> -->
     <link rel="stylesheet" href="/styles/homepage.css">
   </head>
   <body>
     <div class= 'header'>
-      <h2> Homepage </h2>
+      <h2> YourMangaTracker </h2>
       <h2>  <a href={{logout}}>Logout</a> </h2>
     </div>
     <form method=POST action="/search">
@@ -17,36 +17,42 @@
       <button type=Submit  id ='clicks'>Search for Manga</button>
     </form>
 
+      <div>
+        <h2> Recommendations: </h2>
+        <div class = 'box' id = "recbox">
 
-    <div>
-      <h2> Recommendations: </h2>
-
-    </div>
-    <div>
-      <h2> Groups: </h2>
-    </div>
-    <h2> Favourites: </h2>
-    <div class="favorite">
-      {% for key,value in h.items() %}
-        <div class="favorited">
-          <img src={{value[0]}}>
-          <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
         </div>
-      {% endfor %}
-    </div>
-    <div>
+      </div>
+      <div>
+        <h2> Groups: </h2>
+        <div class = 'box' id = "grpbox">
+
+        </div>
+      </div>
+      <div>
+        <h2> Favourites: </h2>
+        <div class="box" id ='favorite'>
+          {% for key,value in h.items() %}
+            <div class="favorited">
+              <img class='recimg' src={{value[0]}}>
+              <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
+            </div>
+          {% endfor %}
+      </div>
+      <div  id='frenrecbox'>
       <h2> Friend Recommendations: </h2>
       {% for key,value in e.items() %}
         <div class="friendsuggestion">
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
-        </div>
       {% endfor %}
+        </div>
     </div>
     <div>
       <h2> Friends: </h2>
       {% for key,value in f.items() %}
         <div class="friends">
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+
 
         </div>
       {% endfor %}
