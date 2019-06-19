@@ -51,3 +51,22 @@ button{
   justify-content: space-between;
   color: rgb(123, 158, 158);
 }
+/* this stuff down for links in header */
+#homebut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(123, 158, 158);
+}
+
+#profbut{
+  align-content: right;
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(62, 132, 27);
+}
+
+#logoutbut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(244, 83, 66)
+}
