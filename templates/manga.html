@@ -20,7 +20,7 @@
     <button class="open-button">Rate this Manga</button>
     <div class="form-popup" id="myForm">
       <form method=POST action="/manga/{{info[3]}}" class="form-container">
-        <h2>{{info[4]}}</h2>
+        <h2>{{info[6]}}</h2>
         <div ><b>Rate This Manga (out of 10)</b></div>
         <input type="text" placeholder="Enter a score..." name="rating" id='rating'>
         <div id='review'><b>Review This Manga</b></div>
@@ -35,14 +35,14 @@
       </form>
     </div>
     <div class='square' id='summary'>
-      <h5>Rated by the community: (score)/10</h5>
+      <h5>Rated by the community: {{info[4]}}/10</h5>
       <h5>Rated by your friends: (score)/10</h5>
-      <h5>No. Chapter: (chap.count)</h5>
+      <h5>No. of Chapters: {{info[5]}}</h5>
     </div>
     <div class="reviews">
       <h4>REVIEWS:</h4>
     </div>
-    
+
   </body>
 
 </html>
