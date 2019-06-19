@@ -40,6 +40,7 @@ form.example::after {
   display: table;
 }
 .header {
+  color: rgb(123, 158, 158);
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -62,7 +63,7 @@ form.example::after {
   border: solid 1px black;
 
 }
-.recimg {
+.cssimg {
   width: 120px;
   height: 198px;
 }
