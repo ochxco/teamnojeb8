@@ -20,18 +20,22 @@
 
     <div>
       <h2> Recommendations: </h2>
+      <div class='box' id='recbox'></div>
     </div>
     <div>
       <h2> Groups: </h2>
+      <div class='box' id='grpbox'></div>
     </div>
     <div>
       <h2> Favourites: </h2>
+      <div class='box' id='fav'></div>
     </div>
     <div>
       <h2> Friend Recommendations: </h2>
       {% for key,value in e.items() %}
         <div class="friendsuggestion">
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+        <div class='box' id='frenrecbox'></div>
 
         </div>
       {% endfor %}
@@ -41,6 +45,7 @@
       {% for key,value in f.items() %}
         <div class="friends">
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+        
 
         </div>
       {% endfor %}
