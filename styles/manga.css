@@ -100,3 +100,21 @@ img {
   flex-direction: row;
   justify-content: space-between;
 }
+
+.square{
+  display: solid;
+  position: absolute;
+  top: 220px;
+  right: 20px;
+  border: 8px solid grey;
+  width: 250px;
+
+}
+
+.revbox{
+  margin: 10px;
+  height: 100px;
+  border-style: solid;
+  border-width: 1px;
+  border-spacing: 20px;
+}
