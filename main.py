@@ -27,13 +27,11 @@ class MainPageHandler(webapp2.RequestHandler):
       # If the user isn't registered...
       else:
         # Offer a registration form for a first-time visitor:
-        self.response.write('''
-            Welcome to our site, %s!  Please sign up! <br>
-            <form method="post" action="/">
-            <input type="text" name="username" placeholder='Enter a username...'>
-            <input type="submit">
-            </form>
-            ''' % (email_address))
+
+        signuptemplate = JINJA_ENVIRONMENT.get_template('templates/signup.html')
+        d={'email':email_address}
+        self.response.write(signuptemplate.render(d))
+
     else:
       # If the user isn't logged in...
       self.redirect('/login')
@@ -72,28 +70,49 @@ class LoggedInHandler(webapp2.RequestHandler):
                 manga_user = MangaUser.query().filter(MangaUser.email == user.nickname()).get()
                 # print(manga_user)
                 mangausers = MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
-                print(mangausers)
-
+                # print(mangausers)
+                g={}
                 e={}
                 f={}
+                h={}
+                listofrandom=[]
+                list=[]
+                print(manga_user.favorites.keys())
+                for i in range(len(manga_user.favorites.keys())):
+                    mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
+                    h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
+
+                d['h']=h
+                #     if name == mangaquery[i].manga_id:
+                #         manga = mangaquery[i]
+                # d['info']=[manga.imgurl,manga.manga_title,manga.synopsis,manga.manga_id,text]
                 for i in range(len(mangausers)):
                     if mangausers[i].username not in manga_user.friends_list:
                         e[i]={'key':mangausers[i].key,
                               'username': mangausers[i].username,
                               'rating':mangausers[i].user_ratings,
                               'reviews':mangausers[i].user_reviews}
+                        listofrandom.append(i)
                     else:
                         f[i]={'key':mangausers[i].key,
                               'username': mangausers[i].username,
                               'rating':mangausers[i].user_ratings,
                               'reviews':mangausers[i].user_reviews}
-                if len(e)-5>0:
-                    list = generaterandom(len(e))
-                    for i in range(len(list)):
-                        del e[list[i]]
-                d['e']=e
-                d['f']=f
+
                 # print(d['e'][0]['key'].id())
+                if len(e)-5>0:
+                    while len(list) <5:
+                        int = random.choice(listofrandom)
+                        if int not in list:
+                            list.append(int)
+                    for i in range(len(list)):
+                        g[i] = e[list[i]]
+                    d['e']=g
+
+                else:
+                    d['e']=e
+
+                d['f']=f
 
                 self.response.write("Hello " + manga_user.username + '. You are logged in.')
                 self.response.write(hometemplate.render(d))
@@ -101,6 +120,7 @@ class LoggedInHandler(webapp2.RequestHandler):
                 self.response.write('Pls sign up for our page')
         else:
             self.response.write("Sorry, this page is only for logged in users.")
+
 
 class SearchBarHandler(webapp2.RequestHandler):
     def post(self):
@@ -279,12 +299,11 @@ def CalculateRating(manga_id,rating):
 
 def generaterandom(length):
     listofrandom=[]
-    while len(listofrandom)!=length-5:
+    while len(listofrandom)<5:
         no= random.randint(0,length-1)
         if no not in listofrandom:
             listofrandom.append(no)
     return (listofrandom)
-
 
 
 app = webapp2.WSGIApplication([

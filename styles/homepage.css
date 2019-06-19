@@ -44,3 +44,13 @@ form.example::after {
   flex-direction: row;
   justify-content: space-between;
 }
+.favorited{
+  display: flex;
+  flex-direction: column;
+
+}
+.favorite{
+  display: flex;
+  flex-direction: row;
+
+}
