@@ -14,9 +14,10 @@
       <h2> <a href="/profile" id="profbut"> Your Profile </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
-    <h1>User's Profile</h1>
-    <img src={{}}></img>
-    <h3>Username: {{username}}</h3>
+    <h1>{{username}}'s Profile</h1>
+    <h7>Profile Picture: </h7>
+    <br>
+    <img src={{image}}></img>
     <h3> Favorites </h3>
 
     <form method =POST action='/friend/{{id}}'>

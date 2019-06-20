@@ -46,6 +46,7 @@ class MainPageHandler(webapp2.RequestHandler):
         manga_user = MangaUser(
             username=self.request.get('username'),
             email=user.nickname(),
+            profile_img="https://sketchmob.com/wp-content/uploads/2018/06/110748_1e7a40910-720x974.jpg",
             user_ratings={},
             user_reviews={},
             friends_list={},
@@ -316,7 +317,7 @@ class FriendHandler(webapp2.RequestHandler):
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
-                d={'username': mangauser[i].username, 'id':name1}
+                d={'username': mangauser[i].username, 'id':name1, 'image': mangauser[i].profile_img}
         if d['username'] not in manga_user.friends_list:
             text = "Click to follow user"
         else:
