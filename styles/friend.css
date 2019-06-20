@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  font-family: 'Paytone One', sans-serif;
+  margin-top: -30px;
 }
 /* this stuff down for links in header */
 #homebut{
@@ -21,4 +23,9 @@
   border: solid 1px black;
   padding: 5px;
   color: rgb(244, 83, 66)
+}
+
+img {
+  max-width:150px;
+  max-height: 200px;
 }

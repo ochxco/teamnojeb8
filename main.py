@@ -46,6 +46,7 @@ class MainPageHandler(webapp2.RequestHandler):
         manga_user = MangaUser(
             username=self.request.get('username'),
             email=user.nickname(),
+            profile_img="https://sketchmob.com/wp-content/uploads/2018/06/110748_1e7a40910-720x974.jpg",
             user_ratings={},
             user_reviews={},
             friends_list={},
@@ -97,6 +98,7 @@ class LoggedInHandler(webapp2.RequestHandler):
                 list=[]
                 rec=[]
                 mangas=Manga.query().fetch()
+                print(rec)
                 # print(manga_user.favorites.keys())
                 if mangas!=[]:
 
@@ -120,7 +122,6 @@ class LoggedInHandler(webapp2.RequestHandler):
                                 if ind == manga_user.username:
                                     del j[mangas[i].manga_id]
 
-                if len(j)!=0:
                     avg=calculateaverage(j)
                     print(avg)
                     count1=getgoodfrendrec(avg)
@@ -153,6 +154,7 @@ class LoggedInHandler(webapp2.RequestHandler):
                                 if ind == manga_user.username:
                                     del k[mangas[i].manga_id]
                         rec.extend(getmaxvalues(k,diff))
+                    print(rec)
                 if mangas !=[]:
                     for i in range(len(mangas)):
                         if mangas[i].manga_id in rec:
@@ -381,7 +383,7 @@ class FriendHandler(webapp2.RequestHandler):
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
-                d={'username': mangauser[i].username, 'id':name1}
+                d={'username': mangauser[i].username, 'id':name1, 'image': mangauser[i].profile_img}
         if d['username'] not in manga_user.friends_list:
             text = "Click to follow user"
         else:

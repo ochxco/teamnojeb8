@@ -32,7 +32,21 @@ img {
   flex-wrap: wrap;
 }
 
-button{
+* {
+  box-sizing: border-box;
+}
+
+/* Style the search field */
+form input[type=text] {
+  padding: 10px;
+  font-size: 17px;
+  border: 1px solid grey;
+  float: left;
+  width: 77%;
+  background: #f1f1f1;
+}
+
+button[type=submit]{
   float: left;
   width: 23%;
   height:42px;
@@ -44,12 +58,20 @@ button{
   border-left: none; /* Prevent double borders */
   cursor: pointer;
 }
+#clicks{
+  word-wrap: break-word;
+}
+
+form button[type=submit]:hover {
+  background: #0b7dda;
+}
 
 .header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  color: rgb(123, 158, 158);
+  font-family: 'Paytone One', sans-serif;
+  margin-top: -30px;
 }
 /* this stuff down for links in header */
 #homebut{
