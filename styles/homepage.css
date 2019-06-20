@@ -96,17 +96,8 @@ form.example::after {
   width: 120px;
   height: 160px;
 }
-#frenrecbox{
-  display: flex;
-  flex-direction: row;
-  margin:5px;
-}
-.friendsuggestion{
-  display: flex;
-  flex-direction: column;
-  text-align: center;
 
-}
+
 .profilepic{
   height:100px;
   width:100px;

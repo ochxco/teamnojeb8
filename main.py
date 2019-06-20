@@ -40,9 +40,12 @@ class MainPageHandler(webapp2.RequestHandler):
     # Code to handle a first-time registration from the form:
     user = users.get_current_user()
     name=self.request.get('username')
+
     d = MangaUser.query().filter(MangaUser.username == name).fetch()
     #print(d)
-    if d == []:
+    if name =='':
+        self.redirect('/loginagain')
+    elif d == []:
         manga_user = MangaUser(
             username=self.request.get('username'),
             email=user.nickname(),
@@ -61,7 +64,7 @@ class MainPageHandler(webapp2.RequestHandler):
 class Nametaken(webapp2.RequestHandler):
     def get(self):
         login_url = users.create_login_url("/")
-        self.response.write('Your username is already taken. <a href="' + login_url + '">Click here to login</a>')
+        self.response.write('ERROR: You did not enter a username/Your username is already taken. <a href="' + login_url + '">Click here to login</a>')
     #def get(self):
         #login_url = users.create_login_url("/")
         #self.response.write('Please log in. <a href="' + login_url + '">Click here to login</a>')

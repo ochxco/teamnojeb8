@@ -53,7 +53,7 @@
       <div  id='frenrecbox'>
       {% for key,value in e.items() %}
         <div class="friendsuggestion">
-          <img class='profilepic' src='https://sketchmob.com/wp-content/uploads/2018/06/110748_1e7a40910-720x974.jpg'>
+          
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
         </div>
       {% endfor %}
