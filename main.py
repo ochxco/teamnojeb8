@@ -202,13 +202,11 @@ class LoggedInHandler(webapp2.RequestHandler):
 
                 else:
                     d['e']=e
-
+                d['username']=manga_user.username
                 d['f']=f
-
-                self.response.write("Hello " + manga_user.username + '. You are logged in.')
                 self.response.write(hometemplate.render(d))
             else:
-                self.response.write('Pls sign up for our page')
+                self.response.write('Please sign up for our page')
         else:
             self.response.write("Sorry, this page is only for logged in users.")
 
@@ -218,6 +216,8 @@ class SearchBarHandler(webapp2.RequestHandler):
         searchtemplate = JINJA_ENVIRONMENT.get_template('templates/tryanime1.html')
         searchTerm=self.request.get('search')
         searchTerm=searchTerm.replace(' ','%20')
+        user = users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
         endpoint_url='https://kitsu.io/api/edge/manga?page[limit]=20&filter[text]='+searchTerm
         response = urlfetch.fetch(endpoint_url)
         content = response.content
@@ -233,7 +233,7 @@ class SearchBarHandler(webapp2.RequestHandler):
                 mangaid=response_as_json['data'][i]['id']
                 d[i]=[image_url,titles,mangaid]
         #print(d)
-        dd = {'d': d, 'e':error}
+        dd = {'d': d, 'e':error,'username':manga_user.username,}
         self.response.write(searchtemplate.render(dd))
 
 class MangaHandler(webapp2.RequestHandler):
@@ -315,6 +315,7 @@ class MangaHandler(webapp2.RequestHandler):
             favoritetext='Added to favorites'
         # print(manga_user)
         d['favoritetext']=favoritetext
+        d['username']=manga_user.username
         self.response.write(mangatemplate.render(d))
 
     def post(self,name):
@@ -382,7 +383,7 @@ class MangaHandler(webapp2.RequestHandler):
         else:
             text = 'Rate this manga'
         d['info'].append(text)
-
+        d['username']=manga_user.username
         d['logout']=logout_url
         d['favoritetext']=favoritetext
         self.response.write(mangatemplate.render(d))
@@ -406,6 +407,7 @@ class FriendHandler(webapp2.RequestHandler):
             text='Following. Click to Unfollow'
         d['text']=text
         d['logout']=logout_url
+        d['username']=manga_user.username
         self.response.write(friendtemplate.render(d))
     def post(self,name):
         friendtemplate = JINJA_ENVIRONMENT.get_template('templates/friend.html')
@@ -429,6 +431,7 @@ class FriendHandler(webapp2.RequestHandler):
         #print(manga_user)
         d['text']=text
         d['logout']=logout_url
+        d['username']=manga_user.username
         self.response.write(friendtemplate.render(d))
 
 class OwnProfileHandler(webapp2.RequestHandler):
@@ -470,7 +473,6 @@ class OwnProfileHandler(webapp2.RequestHandler):
         d = {}
         d={'username':manga_user.username,'image':manga_user.profile_img }
         d['h']=h
-
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
 
