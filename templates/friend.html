@@ -14,16 +14,29 @@
       <h2> <a href="/profile" id="profbut"> Your Profile </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
-    <h1>{{username}}'s Profile</h1>
+    <div class='top'>
+      <h1>{{username}}'s Profile</h1>
+      <div class='follow'>
+        <h2> Follow? </h2>
+        <form method =POST action='/friend/{{id}}'>
+          <button type='submit' id='btn'>{{text}}</button>
+        </form>
+      </div>
+    </div>
     <h7>Profile Picture: </h7>
     <br>
     <img src={{image}}></img>
     <h3> Favorites </h3>
+    <div class="box" id ='favorite'>
+      {% for key,value in h.items() %}
+        <div class="favorited">
+          <img class='cssimg' src={{value[0]}}>
+          <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
+        </div>
+      {% endfor %}
+    </div>
     <br>
-    <h3> Follow? </h3>
-    <form method =POST action='/friend/{{id}}'>
-      <button type='submit'>{{text}}</button>
-    </form>
+
   </body>
 
 </html>

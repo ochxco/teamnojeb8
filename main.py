@@ -95,7 +95,6 @@ class LoggedInHandler(webapp2.RequestHandler):
                 # print(mangausers)
                 g={}
                 e={}
-                f={}
                 h={}
                 j={}
                 k={}
@@ -108,11 +107,6 @@ class LoggedInHandler(webapp2.RequestHandler):
                 print(rec)
                 # print(manga_user.favorites.keys())
                 if mangas!=[]:
-
-                    for i in range(len(manga_user.favorites.keys())):
-                        mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
-                        if mangaquery:
-                            h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
                     for i in range(len(mangas)):
                         if mangas[i].total_ratings.keys() !=[]:
                             j[mangas[i].manga_id]=[]
@@ -182,13 +176,10 @@ class LoggedInHandler(webapp2.RequestHandler):
                         e[i]={'key':mangausers[i].key,
                               'username': mangausers[i].username,
                               'rating':mangausers[i].user_ratings,
-                              'reviews':mangausers[i].user_reviews}
+                              'reviews':mangausers[i].user_reviews,
+                              'profile':mangausers[i].profile_img}
                         listofrandom.append(i)
-                    else:
-                        f[i]={'key':mangausers[i].key,
-                              'username': mangausers[i].username,
-                              'rating':mangausers[i].user_ratings,
-                              'reviews':mangausers[i].user_reviews}
+
 
                 # print(d['e'][0]['key'].id())
                 if len(e)-5>0:
@@ -202,9 +193,6 @@ class LoggedInHandler(webapp2.RequestHandler):
 
                 else:
                     d['e']=e
-
-                d['f']=f
-
                 self.response.write("Hello " + manga_user.username + '. You are logged in.')
                 self.response.write(hometemplate.render(d))
             else:
@@ -396,10 +384,16 @@ class FriendHandler(webapp2.RequestHandler):
         mangauser=MangaUser.query().fetch()
         text=''
         d={}
+        h={}
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
                 d={'username': mangauser[i].username, 'id':name1, 'image': mangauser[i].profile_img}
+                for j in range(len(mangauser[i].favorites.keys())):
+                    mangaquery=Manga.query().filter(mangauser[i].favorites.keys()[j]==Manga.manga_id).get()
+                    if mangaquery:
+                        h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
+        d['h']=h
         if d['username'] not in manga_user.friends_list:
             text = "Click to follow user"
         else:
@@ -415,10 +409,16 @@ class FriendHandler(webapp2.RequestHandler):
         mangauser=MangaUser.query().fetch()
         text=''
         d={}
+        h={}
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
-                d={'username': mangauser[i].username, 'id':name1, 'friend':mangauser[i], 'image':mangauser.profile_img}
+                d={'username': mangauser[i].username, 'id':name1, 'friend':mangauser[i], 'image':mangauser[i].profile_img}
+                for j in range(len(mangauser[i].favorites.keys())):
+                    mangaquery=Manga.query().filter(mangauser[i].favorites.keys()[j]==Manga.manga_id).get()
+                    if mangaquery:
+                        h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
+        d['h']=h
         if d['username'] not in manga_user.friends_list:
             manga_user.followfriend(d['friend'])
             text='Following. Click to unfollow'
@@ -436,16 +436,26 @@ class OwnProfileHandler(webapp2.RequestHandler):
         ownproftemplate = JINJA_ENVIRONMENT.get_template('templates/ownprofile.html')
         user=users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        mangausers = MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
         h={}
+        f={}
         for i in range(len(manga_user.favorites.keys())):
             mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
             if mangaquery:
                 h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
         logout_url = users.create_logout_url("/")
         d = {}
+        for i in range(len(mangausers)):
+            if mangausers[i].username in manga_user.friends_list:
+                f[i]={'key':mangausers[i].key,
+                      'username': mangausers[i].username,
+                      'rating':mangausers[i].user_ratings,
+                      'reviews':mangausers[i].user_reviews,
+                      'profile':mangausers[i].profile_img}
 
         d={'username':manga_user.username,'image':manga_user.profile_img }
         d['h']=h
+        d['f']=f
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
     def post(self):
@@ -470,7 +480,14 @@ class OwnProfileHandler(webapp2.RequestHandler):
         d = {}
         d={'username':manga_user.username,'image':manga_user.profile_img }
         d['h']=h
-
+        for i in range(len(mangausers)):
+            if mangausers[i].username in manga_user.friends_list:
+                f[i]={'key':mangausers[i].key,
+                      'username': mangausers[i].username,
+                      'rating':mangausers[i].user_ratings,
+                      'reviews':mangausers[i].user_reviews,
+                      'profile':mangausers[i].profile_img}
+        d['f']=f
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
 
