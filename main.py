@@ -90,16 +90,81 @@ class LoggedInHandler(webapp2.RequestHandler):
                 e={}
                 f={}
                 h={}
+                j={}
+                k={}
+                l={}
+                avg={}
                 listofrandom=[]
                 list=[]
-                print(manga_user.favorites.keys())
-                if Manga.query().fetch()!=[]:
+                rec=[]
+                mangas=Manga.query().fetch()
+                print(rec)
+                # print(manga_user.favorites.keys())
+                if mangas!=[]:
+
                     for i in range(len(manga_user.favorites.keys())):
                         mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
                         if mangaquery:
                             h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
+                    for i in range(len(mangas)):
+                        if mangas[i].total_ratings.keys() !=[]:
+                            j[mangas[i].manga_id]=[]
+
+                    for i in range(len(mangas)):
+                        if mangas[i].total_ratings.keys() !=[]:
+                            for ind in mangas[i].total_ratings.keys():
+                                if ind in manga_user.friends_list:
+                                    # print(mangas[i].total_ratings)
+                                    # print(mangas[i].manga_id)
+                                    j[mangas[i].manga_id].extend(mangas[i].total_ratings.values())
+
+                            for ind in mangas[i].total_ratings.keys():
+                                if ind == manga_user.username:
+                                    del j[mangas[i].manga_id]
+
+                    avg=calculateaverage(j)
+                    print(avg)
+                    count1=getgoodfrendrec(avg)
+                    diff=0
+                    print(count1)
+                    if count1 >5:
+                        rec=getmaxvalues(avg,5)
+                    elif count1==0:
+                        for i in range(len(mangas)):
+                            if mangas[i].api_ratings!='None':
+                                apirating=float(mangas[i].api_ratings[:3])
+                                k[mangas[i].manga_id]=apirating
+
+                            for ind in mangas[i].total_ratings.keys():
+                                if ind == manga_user.username:
+                                    del k[mangas[i].manga_id]
+                            # print(k.values())
+                        rec.extend(getmaxvalues(k,5))
+                    else:
+                        # print(avg.values())
+                        rec=getmaxvalues(avg,count1)
+                        # print(rec)
+                        diff=5-count1
+                        for i in range(len(mangas)):
+                            if mangas[i].api_ratings!='None':
+                                apirating=float(mangas[i].api_ratings[:3])
+                                if mangas[i].manga_id not in rec:
+                                    k[mangas[i].manga_id]=apirating
+                            for ind in mangas[i].total_ratings.keys():
+                                if ind == manga_user.username:
+                                    del k[mangas[i].manga_id]
+                        rec.extend(getmaxvalues(k,diff))
+                    print(rec)
+                if mangas !=[]:
+                    for i in range(len(mangas)):
+                        if mangas[i].manga_id in rec:
+                            l[i]=[mangas[i].imgurl,mangas[i].manga_title,mangas[i].manga_id]
+
+
+
 
                 d['h']=h
+                d['l']=l
                 for i in range(len(mangausers)):
                     if mangausers[i].username not in manga_user.friends_list:
                         e[i]={'key':mangausers[i].key,
@@ -195,6 +260,10 @@ class MangaHandler(webapp2.RequestHandler):
                 break;
             else:
                 boolean=False
+        if count !=0:
+            averageuserrating=round((totalrating/count),1)
+            friendrating=str(averageuserrating)+'/10'
+        d['averageuserrating']=friendrating
 
         # print(d['reviews'])
         if boolean == False:
@@ -214,6 +283,7 @@ class MangaHandler(webapp2.RequestHandler):
                 averageratin='None'
 
             d['info']=[image_url,titles,synopsis,mangaid,averageratin,chapter, text]
+
             manga = Manga(
                  manga_id=mangaid,
                  manga_title = titles,
@@ -225,9 +295,7 @@ class MangaHandler(webapp2.RequestHandler):
                  chapter=chapter,
             )
             manga.put()
-        if count !=0:
-            averageuserrating=round((totalrating/count),1)
-            friendrating=str(averageuserrating)+'/10'
+
 
         if name not in manga_user.favorites:
             favoritetext='Add to favorites'
@@ -235,8 +303,6 @@ class MangaHandler(webapp2.RequestHandler):
             favoritetext='Added to favorites'
         # print(manga_user)
         d['favoritetext']=favoritetext
-        d['averageuserrating']=friendrating
-
         self.response.write(mangatemplate.render(d))
 
     def post(self,name):
@@ -371,21 +437,37 @@ class SettingsHandler(webapp2.RequestHandler):
         manga_user.background_img(self.request.get('background_img'))
         self.response.write(settingstemplate.render())
 
-def CalculateRating(manga_id,rating):
-    Manga.total_ratings.append(rating)
-    sum = 0
-    for n in manga.total_ratings:
-        sum += n
-    Manga.average_ratings = sum
-    Manga.put()
+def calculateaverage(dict):
+    avg={}
+    for key,value in dict.items():
+        avg[key]=0
+        if value==[]:
+            value=[0]
+        for i in range(len(value)):
+            avg[key]=avg[key]+value[i]
+        avg[key]=round(avg[key]/len(value),1)
+    return avg
 
-def generaterandom(length):
-    listofrandom=[]
-    while len(listofrandom)<5:
-        no= random.randint(0,length-1)
-        if no not in listofrandom:
-            listofrandom.append(no)
-    return (listofrandom)
+def getmaxvalues(dict,no):
+    count = 0
+    maxdict=[]
+    while count < no:
+        max1=max(dict.values())
+        key1=''
+        for key,value in dict.items():
+            if value == max1:
+                key1=key
+        del dict[key1]
+        maxdict.append(key1)
+        count =count +1
+    return (maxdict)
+
+def getgoodfrendrec(dict):
+    count = 0
+    for key,value in dict.items():
+        if value>8.0:
+            count =count+1
+    return count
 
 
 app = webapp2.WSGIApplication([

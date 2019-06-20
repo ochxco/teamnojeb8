@@ -14,8 +14,8 @@
       <h2> <a href="/profile" id="profbut"> Your Profile </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
-    <form>
-      <input type='text' id ='searchterm' value='{{search}}'></input>
+    <form method=POST action='/search'>
+      <input type='text' id ='searchterm' value='{{search}}' name ='search'></input>
       <button type =submit id ='clicks' >Search</button>
     </form>
     <br>

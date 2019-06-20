@@ -71,6 +71,17 @@ form.example::after {
   margin:5px
 
 }
+#recbox{
+  display: flex;
+  flex-direction: row;
+}
+.recommend{
+  display: flex;
+  flex-direction: column;
+  width: 120px;
+  margin:5px
+
+}
 #favorite{
   display: flex;
   flex-direction: row;
