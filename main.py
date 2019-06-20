@@ -7,6 +7,8 @@ import json
 from google.appengine.ext import ndb
 from models import Manga, MangaUser
 import random
+import urllib
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -40,16 +42,18 @@ class MainPageHandler(webapp2.RequestHandler):
     # Code to handle a first-time registration from the form:
     user = users.get_current_user()
     name=self.request.get('username')
+    profileimage=self.request.get('image')
 
     d = MangaUser.query().filter(MangaUser.username == name).fetch()
     #print(d)
     if name =='':
         self.redirect('/loginagain')
+
     elif d == []:
         manga_user = MangaUser(
             username=self.request.get('username'),
             email=user.nickname(),
-            profile_img="https://sketchmob.com/wp-content/uploads/2018/06/110748_1e7a40910-720x974.jpg",
+            profile_img=profileimage,
             user_ratings={},
             user_reviews={},
             friends_list={},
@@ -354,8 +358,7 @@ class MangaHandler(webapp2.RequestHandler):
         else:
             rating = self.request.get("rating")
             reviews = self.request.get('review')
-            text = 'You have already rated this manga. Do you want to rate this again?'
-            d['info'].append(text)
+
             if rating =='' and reviews =='':
                 pass
             elif reviews =='':
@@ -369,6 +372,11 @@ class MangaHandler(webapp2.RequestHandler):
             manga_user.put()
             manga.put()
 
+        if name in manga_user.user_ratings:
+            text = 'You have already rated this manga. Do you want to rate this again?'
+        else:
+            text = 'Rate this manga'
+        d['info'].append(text)
 
         d['logout']=logout_url
         d['favoritetext']=favoritetext
@@ -428,16 +436,27 @@ class OwnProfileHandler(webapp2.RequestHandler):
         d={'username':manga_user.username,'image':manga_user.profile_img }
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
-
-class SettingsHandler(webapp2.RequestHandler):
     def post(self):
-        settingstemplate = JINJA_ENVIRONMENT.get_template('templates/settings.html')
+        ownproftemplate = JINJA_ENVIRONMENT.get_template('templates/ownprofile.html')
         user=users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
         logout_url = users.create_logout_url("/")
-        d={}
-        manga_user.profile_img(self.request.get('profile_img'))
-        manga_user.background_img(self.request.get('background_img'))
+        d = {}
+        profileimg=self.request.get('profile_img')
+        if profileimg=='':
+            pass
+        else:
+            manga_user.profile_img=profileimg
+
+        manga_user.put()
+        d={'username':manga_user.username,'image':manga_user.profile_img }
+
+
+        self.response.write(ownproftemplate.render(d))
+
+class SettingsHandler(webapp2.RequestHandler):
+    def get(self):
+        settingstemplate = JINJA_ENVIRONMENT.get_template('templates/settings.html')
         self.response.write(settingstemplate.render())
 
 def calculateaverage(dict):

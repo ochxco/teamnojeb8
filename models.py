@@ -19,7 +19,7 @@ class MangaUser(ndb.Model):
     friends_list = ndb.JsonProperty(required=False)
     groups = ndb.StringProperty(required=False)
     background_img = ndb.StringProperty(required=False)
-    profile_img = ndb.StringProperty (required=False)
+    profile_img = ndb.TextProperty (required=False)
     user_recommendations = ndb.StringProperty(required=False)
     user_ratings = ndb.JsonProperty(required=True)
     user_reviews = ndb.JsonProperty(required=True)

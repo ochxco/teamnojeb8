@@ -3,18 +3,23 @@
   <head>
     <meta charset ='utf-8'>
     <title>Friends's Page</title>
-    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <script src="/scripts/tryanime.js"></script>-->
-    <link rel="stylesheet" href="/styles/friend.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <script src="/scripts/signup.js"></script>
+
   </head>
   <body>
     <h2>Welcome to our site, {{email}}!
       <br> Please sign up! </h2>
-    <br>
-    <form method="post" action="/">
-    <input type="text" name="username" placeholder='Enter a username...'>
 
-    <input type="submit">
+    <form method="post" action="/">
+      Username:
+      <input type="text" name="username" placeholder='Enter a username...'>
+      <br>
+      Profile Pic:
+      <input type='text' name='image' id ='profileimage' placeholder='Enter a image url...'>
+      <br>
+      <br>
+      <input type="submit" id ='submit'>
     </form>
   </body>
 

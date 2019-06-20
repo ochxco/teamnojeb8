@@ -9,12 +9,14 @@
     <link href="https://fonts.googleapis.com/css?family=Paytone+One&display=swap" rel="stylesheet">
   </head>
   <body>
-    <form method = POST action='/'>
+    <form method = POST action='/profile'>
+      <br>
       Profile Picture:
+      <input type = 'text' id='profile_img' name='profile_img' value='Enter a url...'></input>
       <br>
-      <input type = 'text' id='background_img' value={{background_img}}></input>
-      Background Image:
-      <br>
-      <input type = 'text' id='profile_img' value={{profile_img}}></input>
+      <button type='submit' >Edit your Profile!</button>
+    </form>
+    <form method = GET action='/profile'>
+      <input type="submit" value="Go back" />
     </form>
   </body>
