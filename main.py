@@ -513,7 +513,6 @@ class FindFriendHandler(webapp2.RequestHandler):
         friendtemplate = JINJA_ENVIRONMENT.get_template('templates/searchfriend.html')
 
         searchTerm=self.request.get('friend')
-        searchTerm=searchTerm.replace(' ','%20')
         user = users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
         mangausers=MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
