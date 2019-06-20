@@ -193,12 +193,11 @@ class LoggedInHandler(webapp2.RequestHandler):
 
                 else:
                     d['e']=e
-<<<<<<< HEAD
-                self.response.write("Hello " + manga_user.username + '. You are logged in.')
-=======
+
+
                 d['username']=manga_user.username
-                d['f']=f
->>>>>>> b568526d6785b3889d1c04d46724510ef3ae0626
+
+
                 self.response.write(hometemplate.render(d))
             else:
                 self.response.write('Please sign up for our page')
@@ -396,13 +395,13 @@ class FriendHandler(webapp2.RequestHandler):
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
-                d={'username': mangauser[i].username, 'id':name1, 'image': mangauser[i].profile_img}
+                d={'usernames': mangauser[i].username, 'id':name1, 'image': mangauser[i].profile_img}
                 for j in range(len(mangauser[i].favorites.keys())):
                     mangaquery=Manga.query().filter(mangauser[i].favorites.keys()[j]==Manga.manga_id).get()
                     if mangaquery:
                         h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
         d['h']=h
-        if d['username'] not in manga_user.friends_list:
+        if d['usernames'] not in manga_user.friends_list:
             text = "Click to follow user"
         else:
             text='Following. Click to Unfollow'
@@ -422,13 +421,13 @@ class FriendHandler(webapp2.RequestHandler):
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
-                d={'username': mangauser[i].username, 'id':name1, 'friend':mangauser[i], 'image':mangauser[i].profile_img}
+                d={'usernames': mangauser[i].username, 'id':name1, 'friend':mangauser[i], 'image':mangauser[i].profile_img}
                 for j in range(len(mangauser[i].favorites.keys())):
                     mangaquery=Manga.query().filter(mangauser[i].favorites.keys()[j]==Manga.manga_id).get()
                     if mangaquery:
                         h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
         d['h']=h
-        if d['username'] not in manga_user.friends_list:
+        if d['usernames'] not in manga_user.friends_list:
             manga_user.followfriend(d['friend'])
             text='Following. Click to unfollow'
         else:
@@ -490,7 +489,8 @@ class OwnProfileHandler(webapp2.RequestHandler):
         d = {}
         d={'username':manga_user.username,'image':manga_user.profile_img }
         d['h']=h
-<<<<<<< HEAD
+        f={}
+
         for i in range(len(mangausers)):
             if mangausers[i].username in manga_user.friends_list:
                 f[i]={'key':mangausers[i].key,
@@ -499,8 +499,7 @@ class OwnProfileHandler(webapp2.RequestHandler):
                       'reviews':mangausers[i].user_reviews,
                       'profile':mangausers[i].profile_img}
         d['f']=f
-=======
->>>>>>> b568526d6785b3889d1c04d46724510ef3ae0626
+
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
 
@@ -508,6 +507,32 @@ class SettingsHandler(webapp2.RequestHandler):
     def get(self):
         settingstemplate = JINJA_ENVIRONMENT.get_template('templates/settings.html')
         self.response.write(settingstemplate.render())
+
+class FindFriendHandler(webapp2.RequestHandler):
+    def post(self):
+        friendtemplate = JINJA_ENVIRONMENT.get_template('templates/searchfriend.html')
+
+        searchTerm=self.request.get('friend')
+        searchTerm=searchTerm.replace(' ','%20')
+        user = users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        mangausers=MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
+        error=''
+        f={}
+        for i in range(len(mangausers)):
+            if searchTerm in mangausers[i].username:
+                f[i]={'usernames': mangausers[i].username, 'id':mangausers[i].key.id(), 'image': mangausers[i].profile_img}
+
+        if len(f)==0:
+            error='No username found'
+
+
+
+        #print(d)
+        dd = {'f': f, 'e':error}
+
+        self.response.write(friendtemplate.render(dd))
+
 
 def calculateaverage(dict):
     avg={}
@@ -552,4 +577,5 @@ app = webapp2.WSGIApplication([
     ('/loginagain', Nametaken),
     ('/profile', OwnProfileHandler),
     ('/editprofile', SettingsHandler),
+    ('/searchfriend',FindFriendHandler),
 ], debug=True)

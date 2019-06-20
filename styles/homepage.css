@@ -43,8 +43,9 @@ form.example::after {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: stretch;
   font-family: 'Paytone One', sans-serif;
-  margin-top: -30px;
+  margin-top: -20px;
 }
 #homebut{
   border: solid 1px black;
@@ -79,8 +80,8 @@ form.example::after {
   display: flex;
   flex-direction: column;
   width: 120px;
-  margin:5px
-
+  margin:5px;
+  text-align:center;
 }
 #favorite{
   display: flex;
