@@ -6,6 +6,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <script src="/scripts/tryanime.js"></script>
     <link rel="stylesheet" href="/styles/tryanime.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Paytone+One&display=swap" rel="stylesheet">
   </head>
   <body>
     <div class= 'header'>
@@ -13,8 +14,10 @@
       <h2> <a href="/profile" id="profbut"> Your Profile </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
-    <input type='textbox' id ='searchterm' value='{{search}}'></input>
-    <button id ='clicks' >Search</button>
+    <form>
+      <input type='text' id ='searchterm' value='{{search}}'></input>
+      <button type =submit id ='clicks' >Search</button>
+    </form>
     <br>
     <br>
     <br>
