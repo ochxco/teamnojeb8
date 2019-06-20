@@ -19,9 +19,18 @@
     <br>
     <img src={{image}}></img>
     <h3> Favorites </h3>
+    <div class="box" id ='favorite'>
+      {% for key,value in h.items() %}
+        <div class="favorited">
+          <img class='cssimg' src={{value[0]}}>
+          <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
+        </div>
+      {% endfor %}
+    </div>
     <br>
-
-    <a href='/editprofile'> Edit your profile </a>
+    <form method=GET action='/editprofile'>
+      <input type='submit' value='Edit your profile'>
+    </form>
   </body>
 
 </html>

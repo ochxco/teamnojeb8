@@ -128,40 +128,45 @@ class LoggedInHandler(webapp2.RequestHandler):
                             for ind in mangas[i].total_ratings.keys():
                                 if ind == manga_user.username:
                                     del j[mangas[i].manga_id]
+                    for i in range(len(mangas)):
+                        if mangas[i].api_ratings!='None':
+                            apirating=float(mangas[i].api_ratings[:3])
+                            k[mangas[i].manga_id]=apirating
+                    if len(k)>=5:
 
-                    avg=calculateaverage(j)
-                    print(avg)
-                    count1=getgoodfrendrec(avg)
-                    diff=0
-                    print(count1)
-                    if count1 >5:
-                        rec=getmaxvalues(avg,5)
-                    elif count1==0:
-                        for i in range(len(mangas)):
-                            if mangas[i].api_ratings!='None':
-                                apirating=float(mangas[i].api_ratings[:3])
-                                k[mangas[i].manga_id]=apirating
-
-                            for ind in mangas[i].total_ratings.keys():
-                                if ind == manga_user.username:
-                                    del k[mangas[i].manga_id]
-                            # print(k.values())
-                        rec.extend(getmaxvalues(k,5))
-                    else:
-                        # print(avg.values())
-                        rec=getmaxvalues(avg,count1)
-                        # print(rec)
-                        diff=5-count1
-                        for i in range(len(mangas)):
-                            if mangas[i].api_ratings!='None':
-                                apirating=float(mangas[i].api_ratings[:3])
-                                if mangas[i].manga_id not in rec:
+                        avg=calculateaverage(j)
+                        print(avg)
+                        count1=getgoodfrendrec(avg)
+                        diff=0
+                        print(count1)
+                        if count1 >5:
+                            rec=getmaxvalues(avg,5)
+                        elif count1==0:
+                            for i in range(len(mangas)):
+                                if mangas[i].api_ratings!='None':
+                                    apirating=float(mangas[i].api_ratings[:3])
                                     k[mangas[i].manga_id]=apirating
-                            for ind in mangas[i].total_ratings.keys():
-                                if ind == manga_user.username:
-                                    del k[mangas[i].manga_id]
-                        rec.extend(getmaxvalues(k,diff))
-                    print(rec)
+
+                                for ind in mangas[i].total_ratings.keys():
+                                    if ind == manga_user.username:
+                                        del k[mangas[i].manga_id]
+                                # print(k.values())
+                            rec.extend(getmaxvalues(k,5))
+                        else:
+                            # print(avg.values())
+                            rec=getmaxvalues(avg,count1)
+                            # print(rec)
+                            diff=5-count1
+                            for i in range(len(mangas)):
+                                if mangas[i].api_ratings!='None':
+                                    apirating=float(mangas[i].api_ratings[:3])
+                                    if mangas[i].manga_id not in rec:
+                                        k[mangas[i].manga_id]=apirating
+                                for ind in mangas[i].total_ratings.keys():
+                                    if ind == manga_user.username:
+                                        del k[mangas[i].manga_id]
+                            rec.extend(getmaxvalues(k,diff))
+                        print(rec)
                 if mangas !=[]:
                     for i in range(len(mangas)):
                         if mangas[i].manga_id in rec:
@@ -431,9 +436,16 @@ class OwnProfileHandler(webapp2.RequestHandler):
         ownproftemplate = JINJA_ENVIRONMENT.get_template('templates/ownprofile.html')
         user=users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        h={}
+        for i in range(len(manga_user.favorites.keys())):
+            mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
+            if mangaquery:
+                h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
         logout_url = users.create_logout_url("/")
         d = {}
+
         d={'username':manga_user.username,'image':manga_user.profile_img }
+        d['h']=h
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
     def post(self):
@@ -449,9 +461,17 @@ class OwnProfileHandler(webapp2.RequestHandler):
             manga_user.profile_img=profileimg
 
         manga_user.put()
+        h={}
+        for i in range(len(manga_user.favorites.keys())):
+            mangaquery=Manga.query().filter(manga_user.favorites.keys()[i]==Manga.manga_id).get()
+            if mangaquery:
+                h[i]=[mangaquery.imgurl,mangaquery.manga_title,mangaquery.manga_id]
+        logout_url = users.create_logout_url("/")
+        d = {}
         d={'username':manga_user.username,'image':manga_user.profile_img }
+        d['h']=h
 
-
+        d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
 
 class SettingsHandler(webapp2.RequestHandler):
