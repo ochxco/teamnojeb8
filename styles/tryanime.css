@@ -24,7 +24,10 @@ img {
   flex-direction: row;
   flex-wrap: wrap;
 }
-
+.pic{
+  height:200px;
+  width:200px;
+}
 
 #images {
   display: flex;

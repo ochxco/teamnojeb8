@@ -102,10 +102,11 @@ form.example::after {
   display: flex;
   flex-direction: column;
   text-align: center;
+  margin:5px;
 }
 .profilepic{
-  height:100px;
-  width:100px;
+  height:120px;
+  width:120px;
 }
 #frenrecbox{
   display: flex;

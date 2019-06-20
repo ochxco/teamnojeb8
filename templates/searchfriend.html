@@ -15,8 +15,8 @@
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
     <form method=POST action='/search'>
-      <input type='text' id ='searchterm' value='{{search}}' name ='search'></input>
-      <button type =submit id ='clicks' >Search</button>
+      <input type='text' id ='searchterm' placeholder="search for mangas..." name ='search'></input>
+      <button type =submit id ='clicks' >Search for Manga</button>
     </form>
     <br>
     <br>
@@ -25,8 +25,8 @@
     {{e}}
     {% for key,value in f.items() %}
       <div class="info">
-        <img src={{value['image']}}>
-          <a class = 'title' href='/friend/{{value['id']}}'> {{value['usernames']}} </a>
+        <img class='pic' src={{value['image']}}>
+          <a class = 'title' href='/friend/{{value["id"]}}'> {{value['usernames']}} </a>
       </div>
     {% endfor %}
     </div>
