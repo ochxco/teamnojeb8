@@ -1,0 +1,65 @@
+#favorite{
+  display: flex;
+  flex-direction: row;
+}
+.favorited{
+  display: flex;
+  flex-direction: column;
+  width: 150px;
+  margin:5px;
+  text-align: center;
+  background-color: white;
+}
+.friends{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: white;
+  margin:5px;
+}
+.friendsection{
+  display: flex;
+  flex-direction: row;
+
+}
+.profilepic{
+  height:150px;
+  width:150px;
+}
+.profile{
+  height:200px;
+  width:200px;
+}
+.cssimg {
+  width: 150px;
+  height: 210px;
+}
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: 'Paytone One', sans-serif;
+  margin-top: -30px;
+
+}
+#homebut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(123, 158, 158);
+  background-color: white;
+}
+
+#profbut{
+  align-content: right;
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(62, 132, 27);
+  background-color: white;
+}
+
+#logoutbut{
+  border: solid 1px black;
+  padding: 5px;
+  color: rgb(244, 83, 66);
+  background-color: white;
+}
