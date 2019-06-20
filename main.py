@@ -402,7 +402,7 @@ class FriendHandler(webapp2.RequestHandler):
         name1 = int(name)
         for i in range(len(mangauser)):
             if mangauser[i].key.id() == name1:
-                d={'username': mangauser[i].username, 'id':name1, 'friend':mangauser[i]}
+                d={'username': mangauser[i].username, 'id':name1, 'friend':mangauser[i], 'image':mangauser.profile_img}
         if d['username'] not in manga_user.friends_list:
             manga_user.followfriend(d['friend'])
             text='Following. Click to unfollow'
@@ -410,12 +410,32 @@ class FriendHandler(webapp2.RequestHandler):
             manga_user.removefriend(d['friend'])
             text='Click to follow user'
         manga_user.put()
-        print(manga_user)
+        #print(manga_user)
         d['text']=text
         d['logout']=logout_url
         self.response.write(friendtemplate.render(d))
 
+class OwnProfileHandler(webapp2.RequestHandler):
+    def get(self):
+        ownproftemplate = JINJA_ENVIRONMENT.get_template('templates/ownprofile.html')
+        user=users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        logout_url = users.create_logout_url("/")
+        d = {}
+        d={'username':manga_user.username,'image':manga_user.profile_img }
+        d['logout']=logout_url
+        self.response.write(ownproftemplate.render(d))
 
+class SettingsHandler(webapp2.RequestHandler):
+    def post(self):
+        settingstemplate = JINJA_ENVIRONMENT.get_template('templates/settings.html')
+        user=users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        logout_url = users.create_logout_url("/")
+        d={}
+        manga_user.profile_img(self.request.get('profile_img'))
+        manga_user.background_img(self.request.get('background_img'))
+        self.response.write(settingstemplate.render())
 
 def calculateaverage(dict):
     avg={}
@@ -458,4 +478,6 @@ app = webapp2.WSGIApplication([
     ('/manga/(\w+)', MangaHandler),
     ('/friend/(\w+)', FriendHandler),
     ('/loginagain', Nametaken),
+    ('/profile', OwnProfileHandler),
+    ('/editprofile', SettingsHandler),
 ], debug=True)
