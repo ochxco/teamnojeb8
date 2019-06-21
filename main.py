@@ -498,6 +498,9 @@ class FindFriendHandler(webapp2.RequestHandler):
         friendtemplate = JINJA_ENVIRONMENT.get_template('templates/searchfriend.html')
 
         searchTerm=self.request.get('friend')
+        user=users.get_current_user()
+        manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        logout_url = users.create_logout_url("/")
         user = users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
         mangausers=MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
@@ -513,7 +516,8 @@ class FindFriendHandler(webapp2.RequestHandler):
 
 
         #print(d)
-        dd = {'f': f, 'e':error}
+        dd = {'f': f, 'e':error, 'logout':logout_url,'username':manga_user.username}
+
 
         self.response.write(friendtemplate.render(dd))
 
