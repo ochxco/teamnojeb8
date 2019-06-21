@@ -63,7 +63,7 @@ form.example::after {
 #logoutbut{
   border: solid 1px black;
   padding: 5px;
-  color: rgb(244, 83, 66)
+  color: rgb(244, 83, 66);
 }
 .favorited{
   display: flex;
