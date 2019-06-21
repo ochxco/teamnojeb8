@@ -71,9 +71,11 @@ class Nametaken(webapp2.RequestHandler):
 
 class NoUserHandler(webapp2.RequestHandler):
     def get(self):
-
+        logintemplate = JINJA_ENVIRONMENT.get_template('templates/loginbutton.html')
+        d={}
         login_url = users.create_login_url("/")
         self.response.write('Please log in. <a href="' + login_url + '">Click here to login</a>')
+        self.response.write(logintemplate.render(d))
 
 #user is loggedin
 class LoggedInHandler(webapp2.RequestHandler):
