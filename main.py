@@ -7,7 +7,6 @@ import json
 from google.appengine.ext import ndb
 from models import Manga, MangaUser
 import random
-import urllib
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -29,11 +28,9 @@ class MainPageHandler(webapp2.RequestHandler):
       # If the user isn't registered...
       else:
         # Offer a registration form for a first-time visitor:
-
         signuptemplate = JINJA_ENVIRONMENT.get_template('templates/signup.html')
         d={'email':email_address}
         self.response.write(signuptemplate.render(d))
-
     else:
       # If the user isn't logged in...
       self.redirect('/login')
@@ -43,7 +40,6 @@ class MainPageHandler(webapp2.RequestHandler):
     user = users.get_current_user()
     name=self.request.get('username')
     profileimage=self.request.get('image')
-
     d = MangaUser.query().filter(MangaUser.username == name).fetch()
     #print(d)
     if name =='':
@@ -63,7 +59,6 @@ class MainPageHandler(webapp2.RequestHandler):
                 manga_user.username)
     else:
         self.redirect('/loginagain')
-
 
 class Nametaken(webapp2.RequestHandler):
     def get(self):
@@ -179,8 +174,6 @@ class LoggedInHandler(webapp2.RequestHandler):
                               'reviews':mangausers[i].user_reviews,
                               'profile':mangausers[i].profile_img}
                         listofrandom.append(i)
-
-
                 # print(d['e'][0]['key'].id())
                 if len(e)-5>0:
                     while len(list) <5:
@@ -190,20 +183,14 @@ class LoggedInHandler(webapp2.RequestHandler):
                     for i in range(len(list)):
                         g[i] = e[list[i]]
                     d['e']=g
-
                 else:
                     d['e']=e
-
-
                 d['username']=manga_user.username
-
-
                 self.response.write(hometemplate.render(d))
             else:
                 self.response.write('Please sign up for our page')
         else:
             self.response.write("Sorry, this page is only for logged in users.")
-
 
 class SearchBarHandler(webapp2.RequestHandler):
     def post(self):
@@ -301,7 +288,6 @@ class MangaHandler(webapp2.RequestHandler):
                  chapter=chapter,
             )
             manga.put()
-
 
         if name not in manga_user.favorites:
             favoritetext='Add to favorites'
@@ -499,7 +485,6 @@ class OwnProfileHandler(webapp2.RequestHandler):
                       'reviews':mangausers[i].user_reviews,
                       'profile':mangausers[i].profile_img}
         d['f']=f
-
         d['logout']=logout_url
         self.response.write(ownproftemplate.render(d))
 
@@ -564,7 +549,6 @@ def getgoodfrendrec(dict):
         if value>8.0:
             count =count+1
     return count
-
 
 app = webapp2.WSGIApplication([
     ('/', MainPageHandler),
