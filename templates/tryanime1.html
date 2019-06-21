@@ -17,22 +17,19 @@
     </div>
     <form method=POST action='/search'>
       <input type='text' id ='searchterm' value='{{search}}' name ='search'></input>
-      <button type =submit id ='clicks' >Search</button>
+      <button type ='submit' id ='clicks' >Search</button>
     </form>
     <br>
     <br>
     <br>
     <div class='searchresult'>
-    {{e}}
-    {% for key,value in d.items() %}
+      {{e}}
+      {% for key,value in d.items() %}
       <div class="info">
         <img src={{value[0]}}>
           <a class = 'title' href='/manga/{{value[2]}}'> {{value[1]}} </a>
       </div>
-    {% endfor %}
+      {% endfor %}
     </div>
-    <div id ='images'></div>
-    <div id='titles'></div>
   </body>
-
 </html>

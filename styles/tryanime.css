@@ -17,6 +17,7 @@ img {
   font-size: 20px;
   font-weight: bold;
   margin-top: -5px;
+  font-family: 'Quicksand', sans-serif;
 }
 .searchresult {
   display: flex;
@@ -92,13 +93,9 @@ form button[type=submit]:hover {
 #logoutbut{
   border: solid 1px black;
   padding: 5px;
-  color: rgb(244, 83, 66)
+  color: rgb(244, 83, 66);
 }
 
-h2{
-  font-family: 'Quicksand', sans-serif;
-}
-
-a {
+.searchresult{
   font-family: 'Quicksand', sans-serif;
 }

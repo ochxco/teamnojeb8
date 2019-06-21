@@ -63,6 +63,7 @@ class MainPageHandler(webapp2.RequestHandler):
 class Nametaken(webapp2.RequestHandler):
     def get(self):
         login_url = users.create_login_url("/")
+
         self.response.write('ERROR: You did not enter a username/Your username is already taken. <a href="' + login_url + '">Click here to login</a>')
     #def get(self):
         #login_url = users.create_login_url("/")
@@ -70,6 +71,7 @@ class Nametaken(webapp2.RequestHandler):
 
 class NoUserHandler(webapp2.RequestHandler):
     def get(self):
+
         login_url = users.create_login_url("/")
         self.response.write('Please log in. <a href="' + login_url + '">Click here to login</a>')
 
@@ -121,15 +123,15 @@ class LoggedInHandler(webapp2.RequestHandler):
                         if mangas[i].api_ratings!='None':
                             apirating=float(mangas[i].api_ratings[:3])
                             k[mangas[i].manga_id]=apirating
-                    if len(k)>=5:
+                    if len(k)>=10:
 
                         avg=calculateaverage(j)
                         print(avg)
                         count1=getgoodfrendrec(avg)
                         diff=0
                         print(count1)
-                        if count1 >5:
-                            rec=getmaxvalues(avg,5)
+                        if count1 >10:
+                            rec=getmaxvalues(avg,10)
                         elif count1==0:
                             for i in range(len(mangas)):
                                 if mangas[i].api_ratings!='None':
@@ -140,12 +142,12 @@ class LoggedInHandler(webapp2.RequestHandler):
                                     if ind == manga_user.username:
                                         del k[mangas[i].manga_id]
                                 # print(k.values())
-                            rec.extend(getmaxvalues(k,5))
+                            rec.extend(getmaxvalues(k,10))
                         else:
                             # print(avg.values())
                             rec=getmaxvalues(avg,count1)
                             # print(rec)
-                            diff=5-count1
+                            diff=10-count1
                             for i in range(len(mangas)):
                                 if mangas[i].api_ratings!='None':
                                     apirating=float(mangas[i].api_ratings[:3])
@@ -175,8 +177,8 @@ class LoggedInHandler(webapp2.RequestHandler):
                               'profile':mangausers[i].profile_img}
                         listofrandom.append(i)
                 # print(d['e'][0]['key'].id())
-                if len(e)-5>0:
-                    while len(list) <5:
+                if len(e)-10>0:
+                    while len(list) <10:
                         int = random.choice(listofrandom)
                         if int not in list:
                             list.append(int)
@@ -457,6 +459,7 @@ class OwnProfileHandler(webapp2.RequestHandler):
         ownproftemplate = JINJA_ENVIRONMENT.get_template('templates/ownprofile.html')
         user=users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        mangausers = MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
         logout_url = users.create_logout_url("/")
         d = {}
         profileimg=self.request.get('profile_img')
