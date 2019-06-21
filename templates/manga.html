@@ -15,11 +15,8 @@
       <h2> <a href="/profile" id="profbut"> Your Profile: {{username}} </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
-
     <div class='body'>
       <img src={{info[0]}}>
-
-
       <div id='mangainfo'>
         <h1>{{info[1]}}</h1>
         <h3>SYNOPSIS: {{info[2]}}</h3>
@@ -43,8 +40,6 @@
                 <div class='btncancel'>Close</div>
               </form>
             </div>
-
-
           </div>
           <div class='favourite'>
             <form method=POST action="/manga/{{info[3]}}">
@@ -54,16 +49,13 @@
         </div>
       </div>
     </div>
-
     <div class="reviews">
       <h2>REVIEWS:</h2>
       {% for key,value in reviews.items() %}
         <div class="userreview">
           <p>{{key}}: {{value}}</p>
-
-      {% endfor %}
+        </div>
+        {% endfor %}
     </div>
-
   </body>
-
 </html>
