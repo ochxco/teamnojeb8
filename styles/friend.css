@@ -19,6 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-family: 'Quicksand', sans-serif;
 }
 #btn{
   width:200px;
@@ -51,9 +52,6 @@ img {
 #favorite{
   display: flex;
   flex-direction: row;
-
-
-
 }
 .favorited{
   display: flex;
@@ -62,4 +60,7 @@ img {
   margin:5px;
   text-align: center;
   background-color: white;
+}
+.bot{
+  font-family: 'Quicksand', sans-serif;
 }
