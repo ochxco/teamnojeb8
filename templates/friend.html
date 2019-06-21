@@ -24,20 +24,20 @@
         </form>
       </div>
     </div>
-    <h7>Profile Picture: </h7>
-    <br>
-    <img src={{image}}></img>
-    <h3> Favorites </h3>
-    <div class="box" id ='favorite'>
-      {% for key,value in h.items() %}
+    <div class='bot'>
+      <h7>Profile Picture: </h7>
+      <br>
+      <img src={{image}}></img>
+      <h3> Favorites </h3>
+      <div class="box" id ='favorite'>
+        {% for key,value in h.items() %}
         <div class="favorited">
           <img class='cssimg' src={{value[0]}}>
           <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
         </div>
-      {% endfor %}
+        {% endfor %}
+      </div>
     </div>
     <br>
-
   </body>
-
 </html>
