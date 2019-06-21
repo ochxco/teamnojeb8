@@ -95,3 +95,7 @@ form button[type=submit]:hover {
   padding: 5px;
   color: rgb(244, 83, 66);
 }
+
+.searchresult{
+  font-family: 'Quicksand', sans-serif;
+}

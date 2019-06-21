@@ -23,15 +23,13 @@
     <br>
     <br>
     <div class='searchresult'>
-    {{e}}
-    {% for key,value in d.items() %}
+      {{e}}
+      {% for key,value in d.items() %}
       <div class="info">
         <img src={{value[0]}}>
           <a class = 'title' href='/manga/{{value[2]}}'> {{value[1]}} </a>
       </div>
-    {% endfor %}
+      {% endfor %}
     </div>
-
   </body>
-
 </html>
