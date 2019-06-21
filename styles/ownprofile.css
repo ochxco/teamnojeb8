@@ -1,6 +1,7 @@
 #favorite{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 
 
@@ -43,6 +44,7 @@ h3{
 .friendsection{
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 
 }
 .profilepic{

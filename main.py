@@ -37,6 +37,7 @@ class MainPageHandler(webapp2.RequestHandler):
 
   def post(self):
     # Code to handle a first-time registration from the form:
+
     user = users.get_current_user()
     name=self.request.get('username')
     profileimage=self.request.get('image')
@@ -71,9 +72,8 @@ class Nametaken(webapp2.RequestHandler):
 
 class NoUserHandler(webapp2.RequestHandler):
     def get(self):
-        logintemplate = JINJA_ENVIRONMENT.get_template('templates/loginbutton.html')
-        d={'login_url':users.create_login_url("/"),}
-        self.response.write(logintemplate.render(d))
+        login_url= users.create_login_url('/')
+        self.response.write('Pls log in. <a href="'+login_url+'">login here</a>')
 
 #user is loggedin
 class LoggedInHandler(webapp2.RequestHandler):
