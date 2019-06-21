@@ -49,7 +49,7 @@
       <div  id='frenrecbox'>
       {% for key,value in e.items() %}
         <div class="friendsuggestion">
-          <img class ='profilepic' src={{profile}}>
+          <img class ='profilepic' src={{value['profile']}}>
           <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
         </div>
       {% endfor %}

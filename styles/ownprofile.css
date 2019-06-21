@@ -5,14 +5,17 @@
 h1{
   background-color: white;
   width: fit-content;
+  font-family: 'Quicksand', sans-serif;
 }
 h2{
   background-color: white;
   width: fit-content;
+  font-family: 'Quicksand', sans-serif;
 }
 h3{
   background-color: white;
   width: fit-content;
+  font-family: 'Quicksand', sans-serif;
 }
 .favorited{
   display: flex;
