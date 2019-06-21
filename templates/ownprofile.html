@@ -15,23 +15,23 @@
       <h2> <a href="/profile" id="profbut"> Your Profile: {{username}} </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
     </div>
-    <h1>{{username}}'s Profile</h1>
-    <h2>Profile Picture: </h2>
+    <h1 id = 'username'>{{username}}'s Profile</h1>
+    <h2 class='heading'>Profile Picture: </h2>
     <img class='profile' src={{image}}></img>
     <form method=GET action='/editprofile'>
       <input type='submit' value='Edit your Profile Picture'>
     </form>
-    <h2> Favorites </h2>
+    <h2 class='heading'> Favorites </h2>
     <div class="box" id ='favorite'>
       {% for key,value in h.items() %}
         <div class="favorited">
           <img class='cssimg' src={{value[0]}}>
-          <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
+          <a class='titles' href='/manga/{{value[2]}}'>{{value[1]}}</a>
         </div>
       {% endfor %}
     </div>
     <br>
-    <h3> Friends </h3>
+    <h2 class='heading'> Friends </h2>
     <div class='friendsection'>
     {% for key,value in f.items() %}
       <div class="friends">
