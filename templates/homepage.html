@@ -14,14 +14,12 @@
       <h2> <a href='/homepage' id="homebut"> YourMangaTracker </a> </h2>
       <h2> <a href="/profile" id="profbut"> Your Profile: {{username}} </a> </h2>
       <h2> <a href={{logout}} id="logoutbut">Logout</a> </h2>
-
     </div>
     <form method=POST action="/search">
       <input type="text" placeholder="Search..." name="search" id ='searchterm'>
       <button type=Submit  id ='clicks'>Search for Manga</button>
     </form>
-
-      <div>
+      <div id="mangarec">
         <h2> Recommendations: </h2>
         <div class = 'box' id = "recbox">
           {% for key,value in l.items() %}
@@ -30,31 +28,23 @@
               <a href='/manga/{{value[2]}}'>{{value[1]}}</a>
             </div>
           {% endfor %}
-
         </div>
       </div>
-      <div>
-
       <br>
-      </div>
-
       <form method=POST action='/searchfriend'>
         <input type='text'placeholder="Search for username..." name='friend'>
         <button type='Submit' >Search for Friend</button>
       </form>
-      <h2> Friend Recommendations: </h2>
-
-
-
-      <div  id='frenrecbox'>
-      {% for key,value in e.items() %}
-        <div class="friendsuggestion">
-          <img class ='profilepic' src={{value['profile']}}>
-          <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+      <div id='frenrec'>
+        <h2> Friend Recommendations: </h2>
+        <div  id='frenrecbox'>
+          {% for key,value in e.items() %}
+          <div class="friendsuggestion">
+            <img class ='profilepic' src={{value['profile']}}>
+            <a href='/friend/{{value['key'].id()}}'>{{value['username']}}</a>
+          </div>
+          {% endfor %}
         </div>
-      {% endfor %}
-    </div>
-
+      </div>
   </body>
-
 </html>
