@@ -457,6 +457,7 @@ class OwnProfileHandler(webapp2.RequestHandler):
         ownproftemplate = JINJA_ENVIRONMENT.get_template('templates/ownprofile.html')
         user=users.get_current_user()
         manga_user=MangaUser.query().filter(MangaUser.email == user.nickname()).get()
+        mangausers = MangaUser.query().filter(MangaUser.email != user.nickname()).fetch()
         logout_url = users.create_logout_url("/")
         d = {}
         profileimg=self.request.get('profile_img')
