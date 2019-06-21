@@ -539,7 +539,7 @@ def calculateaverage(dict):
 def getmaxvalues(dict,no):
     count = 0
     maxdict=[]
-    while count < no:
+    while count <= no:
         max1=max(dict.values())
         key1=''
         for key,value in dict.items():
