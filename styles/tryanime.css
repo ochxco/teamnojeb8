@@ -94,3 +94,11 @@ form button[type=submit]:hover {
   padding: 5px;
   color: rgb(244, 83, 66)
 }
+
+h2{
+  font-family: 'Quicksand', sans-serif;
+}
+
+a {
+  font-family: 'Quicksand', sans-serif;
+}

@@ -145,4 +145,8 @@ h4{
   display:flex;
   flex-direction: column;
   justify-content: space-between;
+  font-family: 'Quicksand', sans-serif;
+}
+.reviews{
+  font-family: 'Quicksand', sans-serif;
 }

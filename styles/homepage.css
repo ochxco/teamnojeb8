@@ -112,4 +112,11 @@ form.example::after {
   display: flex;
   flex-direction: row;
   margin:5px;
+  font-family: 'Quicksand', sans-serif;
+}
+#mangarec{
+  font-family: 'Quicksand', sans-serif;
+}
+#frenrec{
+  font-family: 'Quicksand', sans-serif;
 }
