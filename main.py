@@ -177,8 +177,8 @@ class LoggedInHandler(webapp2.RequestHandler):
                               'profile':mangausers[i].profile_img}
                         listofrandom.append(i)
                 # print(d['e'][0]['key'].id())
-                if len(e)-5>0:
-                    while len(list) <5:
+                if len(e)-10>0:
+                    while len(list) <10:
                         int = random.choice(listofrandom)
                         if int not in list:
                             list.append(int)
